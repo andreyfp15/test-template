@@ -8,6 +8,7 @@ import Features from '@/views/Features/Index.vue'
 import Plans from '@/views/Plans/Index.vue'
 import Forms from '@/views/Forms/Index.vue'
 import Tables from '@/views/Tables/Index.vue'
+import PasswordReset from '@/views/PasswordReset/Index.vue'
 
 const routes = [
   {
@@ -16,6 +17,14 @@ const routes = [
     component: Login,
     meta: {
       title: 'Login'
+    },
+  },
+  {
+    path: '/passwordreset',
+    name: 'passwordreset',
+    component: PasswordReset,
+    meta: {
+      title: 'Redefinir Senha'
     },
   },
   {
