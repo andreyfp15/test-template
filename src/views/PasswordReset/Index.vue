@@ -1,35 +1,40 @@
-<script setup lang="ts">
+<script lang="ts">
 import { ref } from 'vue'
+
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faEye, faEyeSlash, faUser } from '@fortawesome/free-solid-svg-icons'
+
 import AlertSuccess from '@/components/Alerts/AlertSuccess.vue';
 import AlertError from '@/components/Alerts/AlertError.vue';
+import ButtonApresentation from '@/components/Buttons/ButtonApresentation.vue';
+import ApresentationLayout from '@/layouts/ApresentationLayout.vue';
+import PasswordField from '@/components/Forms/InputFields/PasswordField.vue';
 
 library.add(faEye, faEyeSlash, faUser)
-</script>
 
-<script lang="ts">
 export default {
     components: {
         FontAwesomeIcon,
         AlertSuccess,
-        AlertError
+        AlertError,
+        PasswordField,
+        ButtonApresentation,
+        ApresentationLayout
     },
     data() {
         return {
-            inputPassword: "password",
-            inputConfirmPassword: "password",
+            inputPassword: ref('password'),
+            inputConfirmPassword: ref('password'),
             eyeIconPassword: ref('eye'),
             eyeIconConfirmPassword: ref('eye'),
+            new_password: ref(''),
+            confirm_password: ref(''),
 
             modalSuccessActive: ref(false),
             modalErrorActive: ref(false),
             messageModalError: ref(''),
             messageModalSuccess: ref(''),
-
-            password: ref(''),
-            confirmPassword: ref('')
         };
     },
     methods: {
@@ -51,12 +56,17 @@ export default {
             this.modalErrorActive = !this.modalErrorActive;
         },
 
-        passwordReset() {
-            const password = (this.$refs.password as HTMLInputElement).value.trim();
-            const confirmPassword = (this.$refs.confirmPassword as HTMLInputElement).value.trim();
+        updateNewPassword(newPassword: string) {
+            this.new_password = newPassword;
+        },
 
-            if (password !== '' && confirmPassword !== '') {
-                if (password === confirmPassword) {
+        updateConfirmPassword(newPassword: string) {
+            this.confirm_password = newPassword;
+        },
+
+        passwordReset() {
+            if (this.new_password !== '' && this.confirm_password !== '') {
+                if (this.new_password === this.confirm_password) {
                     this.messageModalSuccess = 'Senha alterada com sucesso. \n Agora você já pode voltar para o login.';
                     this.toggleSuccessModal();
                 } else {
@@ -72,73 +82,32 @@ export default {
 };
 </script>
 
+<style>
+input::-ms-reveal,
+input::-ms-clear {
+    display: none;
+}
+</style>
+
 <template>
-    <section class="bg-gray-50 dark:bg-gray-900">
-        <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-            <a href="#" class="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
-                <img src="@/assets/images/logo/logo-login.png" alt="Logo" />
-            </a>
+    <ApresentationLayout card-title="Altere sua senha" :handle="passwordReset" >
+        <template v-slot:slot1>
+            <PasswordField id="password" label="Nova Senha" @passwordChanged="updateNewPassword" />
+            <PasswordField id="confirmPassword" label="Confirmar Senha" @passwordChanged="updateConfirmPassword" />
 
-            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                Bem-vindo(a) de volta! 👋🏼
-            </label>
-            <div
-                class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
-                <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
-                    <h1
-                        class="text-xl text-center font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-                        Altere sua senha
-                    </h1>
-                    <form class="space-y-4 md:space-y-6" action="#">
-                        <div>
-                            <label for="password"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nova Senha</label>
+            <ButtonApresentation label="Alterar Senha" />
 
-                            <div class="relative">
-                                <input ref="password" id="password" :type="inputPassword"
-                                    class="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary text-black dark:text-white" />
-                                <button @click.prevent="togglePasswordVisibility"
-                                    class="absolute right-4 top-4 cursor-pointer">
-                                    <font-awesome-icon :icon="eyeIconPassword" size="lg" style="color: #bebebe;" />
-                                </button>
-                            </div>
-                        </div>
-
-                        <div>
-                            <label for="password"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Confirmar
-                                Senha</label>
-
-                            <div class="relative">
-                                <input ref="confirmPassword" id="password" :type="inputConfirmPassword"
-                                    class="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary text-black dark:text-white" />
-                                <button @click.prevent="toggleConfirmPasswordVisibility"
-                                    class="absolute right-4 top-4 cursor-pointer">
-                                    <font-awesome-icon :icon="eyeIconConfirmPassword" size="lg"
-                                        style="color: #bebebe;" />
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="mb-5 mt-6">
-                            <input type="button" value="Alterar Senha" @click="passwordReset"
-                                class="w-full cursor-pointer rounded-lg border border-primary bg-primary p-4 font-medium text-white transition hover:bg-opacity-90" />
-                        </div>
-                        <div class="">
-                            <router-link :to="{ path: '/' }">
-                                <input type="button" value="Voltar ao login"
-                                    class="w-full cursor-pointer rounded-lg p-4 font-medium text-primary transition hover:bg-opacity-90" />
-                            </router-link>
-                        </div>
-                    </form>
-                </div>
+            <div>
+                <router-link :to="{ path: '/' }">
+                    <input type="button" value="Voltar ao login"
+                        class="w-full cursor-pointer rounded-lg p-4 font-medium text-primary transition hover:bg-opacity-90" />
+                </router-link>
             </div>
+        </template>
 
+        <template v-slot:slot2>
             <AlertSuccess :modal-active="modalSuccessActive" @close-modal="toggleSuccessModal"
                 :success-message="messageModalSuccess">
-                <h5 class="mb-3 text-lg font-bold text-black dark:text-[#34D399]">
-                    Sucesso
-                </h5>
                 <p class="text-base leading-relaxed text-body">
                     {{ messageModalSuccess }}
                 </p>
@@ -146,13 +115,10 @@ export default {
 
             <AlertError :modal-active="modalErrorActive" @close-modal="toggleErrorModal"
                 :error-message="messageModalError">
-                <h5 class="mb-3 text-lg font-bold text-black dark:text-[#34D399]">
-                    Erro
-                </h5>
                 <p class="text-base leading-relaxed text-body">
                     {{ messageModalError }}
                 </p>
             </AlertError>
-        </div>
-    </section>
+        </template>
+    </ApresentationLayout>
 </template>
