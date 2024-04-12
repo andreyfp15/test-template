@@ -67,7 +67,7 @@ export default {
         passwordReset() {
             if (this.new_password !== '' && this.confirm_password !== '') {
                 if (this.new_password === this.confirm_password) {
-                    this.messageModalSuccess = 'Senha alterada com sucesso. \n Agora você já pode voltar para o login.';
+                    this.messageModalSuccess = 'Senha alterada com sucesso. Agora você já pode voltar para o login.';
                     this.toggleSuccessModal();
                 } else {
                     this.messageModalError = 'As senhas não correspondem!';
