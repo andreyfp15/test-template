@@ -1,13 +1,11 @@
-<script setup lang="ts">
+<script lang="ts">
 import { ref } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faEye, faEyeSlash, faUser } from '@fortawesome/free-solid-svg-icons'
 
 library.add(faEye, faEyeSlash, faUser)
-</script>
 
-<script lang="ts">
 export default {
     components: {
         FontAwesomeIcon

@@ -28,7 +28,7 @@ const packages = ref([
                             <th class="min-w-[220px] py-2 px-2 pl-6 font-medium text-black dark:text-white">Nome</th>
                             <th class="min-w-[150px] py-2 px-2 pl-6 font-medium text-black dark:text-white">Data</th>
                             <th class="min-w-[120px] py-2 px-2 pl-6 font-medium text-black dark:text-white">Status</th>
-                            <th class="py-2 px-2 pl-6 font-medium text-black dark:text-white">Açoes</th>
+                            <th class="py-2 px-2 pl-6 font-medium text-black dark:text-white">Ações</th>
                         </tr>
                     </thead>
                     <tbody>
