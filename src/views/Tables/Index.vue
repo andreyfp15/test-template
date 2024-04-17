@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<!-- <script setup lang="ts">
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
 import TitlePageDefault from '@/components/Titles/TitlePageDefault.vue'
 </script>
@@ -125,8 +125,8 @@ export default {
             </div>
         </div>
     </DefaultLayout>
-</template>
-<!-- <script setup lang="ts">
+</template> -->
+<script setup lang="ts">
 import { ref } from 'vue'
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
 import TitlePageDefault from '@/components/Titles/TitlePageDefault.vue'
@@ -205,4 +205,4 @@ const packages = ref([
         </div>
 
     </DefaultLayout>
-</template> -->
+</template>
