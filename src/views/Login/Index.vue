@@ -113,7 +113,7 @@ input::-ms-clear {
                 </div>
             </div>
 
-            <PasswordField id="password" label="Nova Senha" @passwordChanged="updatePassword">
+            <PasswordField id="password" label="Senha" @passwordChanged="updatePassword">
                 <div class="text-left bottom-4 text-sm font-medium text-gray-900 dark:text-white mt-4 relative">
                     <a href="#" @click.prevent="forgotPassword" class="hover:text-blue-500">Esqueceu a
                         senha?</a>

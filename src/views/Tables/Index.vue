@@ -1,30 +1,132 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
 import TitlePageDefault from '@/components/Titles/TitlePageDefault.vue'
-
-const pageTitle = ref('Tabelas')
-
-const packages = ref([
-    { name: 'Free Package', price: '$0.00', invoiceDate: '12/01/2024', status: 'Paid' },
-    { name: 'Standard Package', price: '$59.00', invoiceDate: '12/01/2024', status: 'Paid' },
-    { name: 'Business Package', price: '$99.00', invoiceDate: '12/01/2024', status: 'Unpaid' },
-    { name: 'Standard Package', price: '$59.00', invoiceDate: '12/01/2024', status: 'Pending' }
-])
-
 </script>
+
+<script lang="ts">
+import { ref } from 'vue'
+
+import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
+import ColumnGroup from 'primevue/columngroup';
+import Row from 'primevue/row';
+
+import { ProductService } from '@/assets/ProductService.js';
+
+export default {
+    components: {
+        DefaultLayout,
+        TitlePageDefault,
+        DataTable,
+        Column
+    },
+    data() {
+        return {
+            products: ref(),
+            editingRows: [],
+            statuses: [
+                { label: 'In Stock', value: 'INSTOCK' },
+                { label: 'Low Stock', value: 'LOWSTOCK' },
+                { label: 'Out of Stock', value: 'OUTOFSTOCK' }
+            ],
+            pageTitle: ref('Tabelas'),
+            packages: ref([
+                { name: 'Free Package', price: '$0.00', invoiceDate: '12/01/2024', status: 'Paid' },
+                { name: 'Standard Package', price: '$59.00', invoiceDate: '12/01/2024', status: 'Paid' },
+                { name: 'Business Package', price: '$99.00', invoiceDate: '12/01/2024', status: 'Unpaid' },
+                { name: 'Standard Package', price: '$59.00', invoiceDate: '12/01/2024', status: 'Pending' }
+            ])
+        };
+    },
+    mounted() {
+        ProductService.getProductsMini().then((data: any) => (this.products = data));
+    },
+    methods: {
+        onRowEditSave(event: any) {
+            let { newData, index } = event;
+
+            this.products[index] = newData;
+        },
+        getStatusLabel(status: any) {
+            switch (status) {
+                case 'INSTOCK':
+                    return 'success';
+
+                case 'LOWSTOCK':
+                    return 'warning';
+
+                case 'OUTOFSTOCK':
+                    return 'danger';
+
+                default:
+                    return null;
+            }
+        },
+        formatCurrency(value: any) {
+            return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value);
+        }
+    }
+};
+</script>
+
+<!-- <script>
+import { ProductService } from '@/assets/ProductService';
+import { ref } from 'vue';
+
+export default {
+    data() {
+        return {
+            pageTitle: ref('Tabelas'),
+            products: ref(''),
+            editingRows: [],
+            statuses: [
+                { label: 'In Stock', value: 'INSTOCK' },
+                { label: 'Low Stock', value: 'LOWSTOCK' },
+                { label: 'Out of Stock', value: 'OUTOFSTOCK' }
+            ]
+        };
+    },
+    mounted() {
+        ProductService.getProductsMini().then((data) => (this.products = data));
+    },
+    methods: {
+        onRowEditSave(event) {
+            let { newData, index } = event;
+
+            this.products[index] = newData;
+        },
+        getStatusLabel(status) {
+            switch (status) {
+                case 'INSTOCK':
+                    return 'success';
+
+                case 'LOWSTOCK':
+                    return 'warning';
+
+                case 'OUTOFSTOCK':
+                    return 'danger';
+
+                default:
+                    return null;
+            }
+        },
+        formatCurrency(value) {
+            return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value);
+        }
+    }
+};
+</script> -->
 
 <template>
     <DefaultLayout>
-
         <TitlePageDefault :pageTitle="pageTitle" />
 
         <div class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
             <div class="max-w-full overflow-x-auto">
-                <table class="w-full table-auto">
+                <!-- <table class="w-full table-auto">
                     <thead>
                         <tr class="bg-gray-2 text-left dark:bg-meta-4 border-b border-zinc-200 dark:border-zinc-600">
-                            <th class="min-w-[30px]  py-2 px-2 pl-6 font-medium text-black dark:text-white">#</th>
+                            <th class="min-w-[30px] py-2 px-2 pl-6 font-medium text-black dark:text-white">#</th>
                             <th class="min-w-[220px] py-2 px-2 pl-6 font-medium text-black dark:text-white">Nome</th>
                             <th class="min-w-[150px] py-2 px-2 pl-6 font-medium text-black dark:text-white">Data</th>
                             <th class="min-w-[120px] py-2 px-2 pl-6 font-medium text-black dark:text-white">Status</th>
@@ -72,9 +174,55 @@ const packages = ref([
                             </td>
                         </tr>
                     </tbody>
-                </table>
+                </table> -->
+
+                <template>
+                    <div class="card p-fluid">
+                        <DataTable v-model:editingRows="editingRows" :value="products" editMode="row" dataKey="id"
+                            @row-edit-save="onRowEditSave" :pt="{
+                                table: { style: 'min-width: 50rem' }
+                            }">
+                            <Column field="code" header="Code" style="width: 20%">
+                                <template #editor="{ data, field }">
+                                    <InputText v-model="data[field]" />
+                                </template>
+                            </Column>
+                            <Column field="name" header="Name" style="width: 20%">
+                                <template #editor="{ data, field }">
+                                    <InputText v-model="data[field]" />
+                                </template>
+                            </Column>
+                            <Column field="inventoryStatus" header="Status" style="width: 20%">
+                                <template #editor="{ data, field }">
+                                    <Dropdown v-model="data[field]" :options="statuses" optionLabel="label"
+                                        optionValue="value" placeholder="Select a Status">
+                                        <template #option="slotProps">
+                                            <Tag :value="slotProps.option.value"
+                                                :severity="getStatusLabel(slotProps.option.value)" />
+                                        </template>
+                                    </Dropdown>
+                                </template>
+                                <template #body="slotProps">
+                                    <Tag :value="slotProps.data.inventoryStatus"
+                                        :severity="getStatusLabel(slotProps.data.inventoryStatus)" />
+                                </template>
+                            </Column>
+                            <Column field="price" header="Price" style="width: 20%">
+                                <template #body="{ data, field }">
+                                    {{ formatCurrency(data[field]) }}
+                                </template>
+                                <template #editor="{ data, field }">
+                                    <InputNumber v-model="data[field]" mode="currency" currency="USD" locale="en-US" />
+                                </template>
+                            </Column>
+                            <Column :rowEditor="true" style="width: 10%; min-width: 8rem" bodyStyle="text-align:center">
+                            </Column>
+                        </DataTable>
+                    </div>
+                </template>
+
+                
             </div>
         </div>
-
     </DefaultLayout>
 </template>

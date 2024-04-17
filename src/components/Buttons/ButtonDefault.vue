@@ -5,7 +5,7 @@ const props = defineProps(['label', 'route', 'customClasses'])
 <template>
   <router-link
     :to="{ path: props.route }"
-    class="inline-flex items-center justify-center gap-2.5 py-4 px-10 text-center font-medium hover:bg-opacity-90 lg:px-8 xl:px-10"
+    class="py-4 px-4 text-center font-medium text-sm hover:bg-opacity-90"
     :class="props.customClasses"
   >
     <slot></slot>
