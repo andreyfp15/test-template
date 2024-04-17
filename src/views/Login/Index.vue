@@ -108,7 +108,7 @@ input::-ms-clear {
                     <span class="absolute right-4 top-4">
                         <font-awesome-icon :icon="['fas', 'user']" size="lg" style="color: #bebebe;" />
                     </span>
-                    <label v-if="!emailValid" class=" block mb-2 text-sm font-small text-red dark:text-white">Email
+                    <label v-if="!emailValid" class="block mb-2 text-sm font-small text-red dark:text-white">Email
                         inválido</label>
                 </div>
             </div>

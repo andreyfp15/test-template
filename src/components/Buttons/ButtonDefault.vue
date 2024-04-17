@@ -1,14 +1,32 @@
-<script setup lang="ts">
-const props = defineProps(['label', 'route', 'customClasses'])
+<script lang="ts">
+export default {
+  props: {
+    label: {
+      type: String,
+      required: true,
+      default: ''
+    },
+    route: {
+      type: String,
+      default: ''
+    },
+    customClasses: {
+      type: String,
+      default: ''
+    },
+    handleClick: Function
+  }
+};
 </script>
 
 <template>
-  <router-link
-    :to="{ path: props.route }"
+  <button
+    :to="{ path: route }"
     class="py-4 px-4 text-center font-medium text-sm hover:bg-opacity-90"
-    :class="props.customClasses"
+    :class="customClasses"
+    @click="handleClick ? handleClick() : $router.push({ path: route })"
   >
     <slot></slot>
-    {{ props.label }}
-  </router-link>
+    {{ label }}
+  </button>
 </template>
