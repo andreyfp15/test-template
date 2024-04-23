@@ -21,7 +21,6 @@ import ModalBase from '@/components/Alerts/ModalBase.vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faPlus, faArrowLeft, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
-import Password from 'primevue/password'
 
 library.add(faPlus, faArrowLeft, faEye, faEyeSlash)
 
