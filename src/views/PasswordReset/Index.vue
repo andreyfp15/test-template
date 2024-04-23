@@ -9,7 +9,7 @@ import AlertSuccess from '@/components/Alerts/AlertSuccess.vue';
 import AlertError from '@/components/Alerts/AlertError.vue';
 import ButtonApresentation from '@/components/Buttons/ButtonApresentation.vue';
 import ApresentationLayout from '@/layouts/ApresentationLayout.vue';
-import PasswordField from '@/components/Forms/InputFields/PasswordField.vue';
+import PasswordField from '@/components/Forms/InputFields/ApresentationPassword.vue';
 
 library.add(faEye, faEyeSlash, faUser)
 

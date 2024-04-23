@@ -138,11 +138,11 @@ const pageTitle = ref('Exemplos formulários')
         <!-- Checkbox and radio -->
         <DefaultCard cardTitle="Checkbox and radio">
           <div class="flex flex-col gap-5.5 p-6.5">
-            <CheckboxOne />
-            <CheckboxTwo />
+            <CheckboxOne id="checkone" value="checkone" />
+            <CheckboxTwo id="checktwo" value="checktwo"/>
             <CheckboxThree />
             <CheckboxFour />
-            <CheckboxFive />
+            <CheckboxFive id="checkfive" value="checkfive" />
           </div>
         </DefaultCard>
         <!-- Checkbox and radio -->

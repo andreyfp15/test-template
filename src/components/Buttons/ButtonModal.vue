@@ -16,7 +16,7 @@ export default {
 
 <template>
   <input type="button" 
-         :value="label" 
+         :value="label"
          @click="$emit('click-event')" 
          :class="`cursor-pointer rounded-lg border-[${buttonColor}] bg-[${buttonColor}] p-4 font-medium text-white transition hover:bg-opacity-50`" />
 </template>
