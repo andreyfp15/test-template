@@ -1,0 +1,41 @@
+<script lang="ts">
+import { defineComponent, ref } from 'vue'
+
+export default {
+    data() {
+        return {
+            // value: ref('')
+        };
+    },
+    props: {
+        id: {
+            type: String,
+            required: true
+        },
+        placeholder: {
+            type: String
+        },
+        type: {
+            type: String,
+            required: true
+        },
+        modelValue: {
+            type: String,
+            required: true
+        }
+    },
+    methods:{
+        updateValue(event: any) {
+            this.$emit("update:modelValue", event.target.value);
+        }
+    }
+}
+</script>
+
+<template>
+    <input :id="id" :type="type" :placeholder="placeholder" :value="modelValue"
+        @input="updateValue" v-bind="$attrs"
+        class="w-full rounded-lg border-[1.5px] text-black border-stroke bg-transparent py-2 px-3 font-normal outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:text-white dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" />
+
+    <slot />
+</template>

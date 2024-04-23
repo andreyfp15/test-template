@@ -32,7 +32,7 @@ export default {
           <div v-show="modalActive"
             class="absolute fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 justify-center border-l-6 border-[#34D399] bg-[#DDEFEB] px-7 py-8 shadow-md dark:bg-[#1B1B24] dark:bg-opacity-30 md:p-9 max-w-[400px] max-h-[400px] overflow-y-auto break-words z-50">
 
-            <div class="flex mr-15">
+            <div class="flex mr-10">
               <div class="mr-5 flex h-9 w-full max-w-[36px] min-w-[36px] items-center justify-center rounded-lg bg-[#34D399]">
                 <svg width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path
