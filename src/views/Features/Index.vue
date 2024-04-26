@@ -1,10 +1,56 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { defineComponent, ref } from 'vue'
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
 import TitlePageDefault from '@/components/Titles/TitlePageDefault.vue'
 
-const pageTitle = ref('Funcionalidades')
+</script>
 
+<script lang="ts">
+
+import { FeatureService } from '@/services/FeaturesService';
+import type { Feature } from '@/models/Feature';
+
+import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
+import InputText from 'primevue/inputtext';
+import { FilterMatchMode } from 'primevue/api';
+import Dropdown from 'primevue/dropdown';
+
+export default defineComponent({
+  components: {},
+  data() {
+    return {
+      pageTitle: ref('Funcionalidades'),
+      features: [] as Feature[],
+      loading: ref(true),
+      products: ['WMS', 'CRM'],
+      editingRows: [],
+      filters: {
+        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        id: { value: null, matchMode: FilterMatchMode.EQUALS },
+        name: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+        createdAt: { value: null, matchMode: FilterMatchMode.DATE_IS },
+        product: { value: null, matchMode: FilterMatchMode.EQUALS }
+      },
+    }
+  },
+  mounted() {
+    FeatureService.getAllFeatures().then((data: Feature[]) => {
+      this.features = data;
+    })
+
+    this.loading = false;
+  },
+  methods: {
+    deleteRow(props: any) {
+      delete this.features[props.id]
+      console.log("WOW")
+    },
+    onRowEditSave(){
+      
+    }
+  }
+});
 </script>
 
 <template>
@@ -17,6 +63,62 @@ const pageTitle = ref('Funcionalidades')
       </svg>
     </TitlePageDefault>
 
+    <div class="bg-[#d1d1d1] w-full h-0.5 rounded-lg mb-3" />
 
+
+    <div class="rounded-lg border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark mt-6 max-w-full overflow-x-auto">
+                <DataTable v-model:editingRows="editingRows" v-model:filters="filters"  :value="features" stripedRows paginator
+                  :rowsPerPageOptions="[5, 10, 20, 50]"
+                  paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
+                  currentPageReportTemplate="{first} to {last} of {totalRecords}" :rows="10" filterDisplay="row"
+                  :loading="loading" :globalFilterFields="['id', 'name', 'product']" editMode="row" dataKey="id"
+                  :pt="{ table: { style: 'min-width: 50rem' } }"
+                  @row-edit-save="onRowEditSave">
+                    <template #empty> Nenhuma funcionalidade foi encontrada. </template>
+                    <template #loading> Carregando funcionalidades... </template>
+
+                    <Column field="id" header="Código" style="width: 5%">
+                      <template #body="{ data }">
+                        {{ data.id }}
+                      </template>
+                    
+                      <template #filter="{ filterModel, filterCallback }">
+                        <InputText v-model="filterModel.value" type="number" @input="filterCallback()" class="font-normal p-2"
+                          placeholder="ID"/>
+                      </template>
+                    </Column>
+                    <Column field="name" header="Nome da Funcionalidade" style="width: 15%">
+                      <template #editor="{ data, field }">
+                        <InputText v-model="data[field]" />
+                      </template>
+                    
+                      <template #filter="{ filterModel, filterCallback }">
+                        <InputText v-model="filterModel.value" type="text" @input="filterCallback()" class="font-normal p-2"
+                          placeholder="Filtrar por nome" />
+                      </template>
+                    </Column>
+                  
+                    <Column field="product" header="Produto" style="width: 15%">
+                      <template #editor="{ data, field }">
+                                <Dropdown v-model="data[field]" :options="products" optionLabel="label" optionValue="value" placeholder="Selecione um produto">
+                                  <template #option="slotProps">
+                                    {{ slotProps.option }}
+                                  </template>
+                                </Dropdown>
+                      </template>
+                      <template #filter="{ filterModel, filterCallback }">
+                        <Dropdown v-model="filterModel.value" @change="filterCallback()" :options="products"
+                          placeholder="Selecionar" class="p-column-filter" style="min-width: 10rem" :showClear="true">
+                            <template #option="slotProps">
+                              {{ slotProps.option }}
+                            </template>
+                        </Dropdown>
+                      </template>
+
+                    </Column>
+
+                    <Column header="Ações" :rowEditor="true" style="width: 5%; min-width: 8rem" />
+                </DataTable>
+      </div>
   </DefaultLayout>
 </template>
