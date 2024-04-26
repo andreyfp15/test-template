@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faEye, faEyeSlash, faUser } from '@fortawesome/free-solid-svg-icons'
 
-import { validateEmail } from '@/modules/Functions'
+import { validateEmail } from '@/modules/GenericFunctions'
 
 import AlertSuccess from '@/components/Alerts/AlertSuccess.vue';
 import AlertError from '@/components/Alerts/AlertError.vue';

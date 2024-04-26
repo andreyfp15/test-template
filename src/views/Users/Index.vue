@@ -7,7 +7,7 @@ import TitlePageDefault from '@/components/Titles/TitlePageDefault.vue'
 <script lang="ts">
 import { ref, defineComponent, reactive, toRefs } from 'vue'
 
-import { validateEmail } from '@/modules/Functions'
+import { validateEmail } from '@/modules/GenericFunctions'
 
 import ButtonDefault from '@/components/Buttons/ButtonDefault.vue'
 import CheckboxOne from '@/components/Forms/Checkboxes/CheckboxOne.vue'
@@ -22,17 +22,21 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faPlus, faArrowLeft, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 
+import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
+import Tag from 'primevue/tag';
+import { FilterMatchMode, FilterOperator } from 'primevue/api';
+import InputText from 'primevue/inputtext';
+import Dropdown from 'primevue/dropdown';
+import Calendar from 'primevue/calendar';
+
+import { CustomerService } from '@/assets/CustomerService';
+
 library.add(faPlus, faArrowLeft, faEye, faEyeSlash)
 
 export default defineComponent({
   components: {
-    ButtonDefault,
-    CheckboxOne,
-    LabelFields,
-    LabelInformation,
-    InputForms,
-    ButtonApresentation,
-    ScreenForms
+
   },
   data() {
     const usersField = reactive({
@@ -84,8 +88,29 @@ export default defineComponent({
       messageModalError: ref(''),
       messageModalSuccess: ref(''),
 
-      ...toRefs(usersField)
+      ...toRefs(usersField),
+
+      users: [] as any[],
+      selectedUser: null as any,
+      loading: ref(true),
+      filters: {
+        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        id: { value: null, matchMode: FilterMatchMode.EQUALS },
+        name: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+        date: { value: null, matchMode: FilterMatchMode.DATE_IS },
+        status: { value: null, matchMode: FilterMatchMode.EQUALS }
+      },
+      status: ['Ativo', 'Inativo'],
+
+      editing: ref(false)
     }
+  },
+  mounted() {
+    this.getDataMedium().then((data: any) => {
+      this.users = this.getUsers(data);
+    });
+
+    this.loading = false;
   },
   methods: {
     changeScreen() {
@@ -129,6 +154,14 @@ export default defineComponent({
       this.confidentialInformation = false
     },
 
+    backToQueryUser() {
+      this.changeScreen();
+
+      this.resetFields();
+
+      this.editing = false;
+    },
+
     togglePasswordVisibility() {
       this.inputType = this.inputType === 'password' ? 'text' : 'password';
       this.eyeIcon = this.inputType === 'password' ? 'eye' : 'eye-slash';
@@ -149,12 +182,12 @@ export default defineComponent({
         if ((this.name !== '' && this.name !== null) &&
           (this.password !== '' && this.password !== null)) {
           // if (this.temporaryPassword === true) {
-            this.resetFields();
+          this.resetFields();
 
-            this.messageModalSuccess = 'Cadastro realizado com sucesso.';
-            this.toggleSuccessModal();
+          this.messageModalSuccess = 'Cadastro realizado com sucesso.';
+          this.toggleSuccessModal();
 
-            this.changeScreen();
+          this.changeScreen();
           // } else {
           //   this.messageModalError = 'temporaryPassword';
           //   this.toggleErrorModal();
@@ -164,6 +197,96 @@ export default defineComponent({
           this.toggleErrorModal();
         }
       }
+    },
+
+    getSeverity(status: string) {
+      switch (status) {
+        case 'Inativo':
+          return 'danger';
+
+        case 'Ativo':
+          return 'success';
+      }
+    },
+
+    formatDate(value: any) {
+      return value.toLocaleDateString('pt-BR', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+      });
+    },
+
+    getUsers(data: any) {
+      return [...(data || [])].map((d) => {
+        d.date = new Date(d.date);
+
+        return d;
+      });
+    },
+
+    getData() {
+      return [
+        { id: 1, name: 'Allan Lima', date: '2024-04-24', status: 'Ativo', email: 'allan.santos@smart01.com.br', temporaryPassword: true, includeClients: true, editClients: true, deleteClients: false, includeUsers: true, editUsers: true, deleteUsers: false, includeLicenses: true, editLicenses: true, deleteLicenses: true, includeFunctionalities: true, editFunctionalities: true, deleteFunctionalities: true, includePlans: true, editPlans: true, deletePlans: true, includeLogs: true, editLogs: true, deleteLogs: false, confidentialInformation: true },
+        { id: 2, name: 'Luana Mandzirosche', date: '2024-04-23', status: 'Ativo', email: 'luana@smart01.com.br', temporaryPassword: true, includeClients: true, editClients: true, deleteClients: false, includeUsers: true, editUsers: true, deleteUsers: false, includeLicenses: true, editLicenses: true, deleteLicenses: true, includeFunctionalities: true, editFunctionalities: true, deleteFunctionalities: true, includePlans: true, editPlans: true, deletePlans: true, includeLogs: true, editLogs: true, deleteLogs: false, confidentialInformation: true },
+        { id: 3, name: 'Arthur Brites', date: '2024-04-22', status: 'Inativo', email: 'arthur@smart01.com.br', temporaryPassword: true, includeClients: true, editClients: true, deleteClients: false, includeUsers: true, editUsers: true, deleteUsers: false, includeLicenses: true, editLicenses: true, deleteLicenses: true, includeFunctionalities: true, editFunctionalities: true, deleteFunctionalities: true, includePlans: true, editPlans: true, deletePlans: true, includeLogs: true, editLogs: true, deleteLogs: false, confidentialInformation: true },
+        { id: 4, name: 'Giuliano Costa', date: '2024-04-21', status: 'Inativo', email: 'giuliano@smart01.com.br', temporaryPassword: true, includeClients: true, editClients: true, deleteClients: false, includeUsers: true, editUsers: true, deleteUsers: false, includeLicenses: true, editLicenses: true, deleteLicenses: true, includeFunctionalities: true, editFunctionalities: true, deleteFunctionalities: true, includePlans: true, editPlans: true, deletePlans: true, includeLogs: true, editLogs: true, deleteLogs: false, confidentialInformation: true },
+        { id: 5, name: 'Andrey', date: '2024-04-20', status: 'Ativo', email: 'Andrey@smart01.com.br', temporaryPassword: true, includeClients: true, editClients: true, deleteClients: false, includeUsers: true, editUsers: true, deleteUsers: false, includeLicenses: true, editLicenses: true, deleteLicenses: true, includeFunctionalities: true, editFunctionalities: true, deleteFunctionalities: true, includePlans: true, editPlans: true, deletePlans: true, includeLogs: true, editLogs: true, deleteLogs: false, confidentialInformation: true },
+        { id: 6, name: 'Alvanir', date: '2024-04-19', status: 'Ativo', email: 'Alvanir@smart01.com.br', temporaryPassword: true, includeClients: true, editClients: true, deleteClients: false, includeUsers: true, editUsers: true, deleteUsers: false, includeLicenses: true, editLicenses: true, deleteLicenses: true, includeFunctionalities: true, editFunctionalities: true, deleteFunctionalities: true, includePlans: true, editPlans: true, deletePlans: true, includeLogs: true, editLogs: true, deleteLogs: false, confidentialInformation: true },
+        { id: 7, name: 'Lislaine', date: '2024-04-18', status: 'Inativo', email: 'Lislaine@smart01.com.br', temporaryPassword: true, includeClients: true, editClients: true, deleteClients: false, includeUsers: true, editUsers: true, deleteUsers: false, includeLicenses: true, editLicenses: true, deleteLicenses: true, includeFunctionalities: true, editFunctionalities: true, deleteFunctionalities: true, includePlans: true, editPlans: true, deletePlans: true, includeLogs: true, editLogs: true, deleteLogs: false, confidentialInformation: true },
+        { id: 8, name: 'Matheus', date: '2024-04-17', status: 'Inativo', email: 'Matheus@smart01.com.br', temporaryPassword: true, includeClients: true, editClients: true, deleteClients: false, includeUsers: true, editUsers: true, deleteUsers: false, includeLicenses: true, editLicenses: true, deleteLicenses: true, includeFunctionalities: true, editFunctionalities: true, deleteFunctionalities: true, includePlans: true, editPlans: true, deletePlans: true, includeLogs: true, editLogs: true, deleteLogs: false, confidentialInformation: true },
+        { id: 9, name: 'Luiz', date: '2024-04-16', status: 'Ativo', email: 'Luiz@smart01.com.br', temporaryPassword: true, includeClients: true, editClients: true, deleteClients: false, includeUsers: true, editUsers: true, deleteUsers: false, includeLicenses: true, editLicenses: true, deleteLicenses: true, includeFunctionalities: true, editFunctionalities: true, deleteFunctionalities: true, includePlans: true, editPlans: true, deletePlans: true, includeLogs: true, editLogs: true, deleteLogs: false, confidentialInformation: true },
+        { id: 10, name: 'Miguel', date: '2024-04-17', status: 'Ativo', email: 'Miguel@smart01.com.br', temporaryPassword: true, includeClients: true, editClients: true, deleteClients: false, includeUsers: true, editUsers: true, deleteUsers: false, includeLicenses: true, editLicenses: true, deleteLicenses: true, includeFunctionalities: true, editFunctionalities: true, deleteFunctionalities: true, includePlans: true, editPlans: true, deletePlans: true, includeLogs: true, editLogs: true, deleteLogs: false, confidentialInformation: true },
+      ]
+    },
+
+    getDataMedium() {
+      return Promise.resolve(this.getData().slice(0, 10));
+    },
+
+    fillFields() {
+      this.editing = true;
+
+      this.name = this.selectedUser.name;
+      this.email = this.selectedUser.email;
+
+      this.temporaryPassword = this.selectedUser.temporaryPassword;
+
+      this.includeClients = this.selectedUser.includeClients;
+      this.editClients = this.selectedUser.editClients;
+      this.deleteClients = this.selectedUser.deleteClients;
+
+      this.includeUsers = this.selectedUser.includeUsers;
+      this.editUsers = this.selectedUser.editUsers;
+      this.deleteUsers = this.selectedUser.deleteUsers;
+
+      this.includeLicenses = this.selectedUser.includeLicenses;
+      this.editLicenses = this.selectedUser.editLicenses;
+      this.deleteLicenses = this.selectedUser.deleteLicenses;
+
+      this.includeFunctionalities = this.selectedUser.includeFunctionalities;
+      this.editFunctionalities = this.selectedUser.editFunctionalities;
+      this.deleteFunctionalities = this.selectedUser.deleteFunctionalities;
+
+      this.includePlans = this.selectedUser.includePlans;
+      this.editPlans = this.selectedUser.editPlans;
+      this.deletePlans = this.selectedUser.deletePlans;
+
+      this.includeLogs = this.selectedUser.includeLogs;
+      this.editLogs = this.selectedUser.editLogs;
+      this.deleteLogs = this.selectedUser.deleteLogs;
+
+      this.confidentialInformation = this.selectedUser.confidentialInformation;
+    },
+
+    onEditing(event: any) {
+      this.editing = true;
+
+      this.selectedUser = this.users.filter((u) => u.id === event.data.id)[0];
+
+      this.fillFields();
+
+      this.changeScreen();
     }
   }
 });
@@ -191,8 +314,73 @@ export default defineComponent({
       </ButtonDefault>
     </div>
 
+    <div v-if="queryUsers"
+      class="rounded-lg border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark mt-6">
+      <div class="max-w-full rounded-lg overflow-x-auto">
+
+        <DataTable v-model:filters="filters" :value="users" stripedRows paginator @row-edit-init="onEditing"
+          :rowsPerPageOptions="[5, 10, 20, 50]"
+          paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
+          currentPageReportTemplate="{first} to {last} of {totalRecords}" :rows="10" filterDisplay="row"
+          :loading="loading" :globalFilterFields="['name', 'date', 'status']" editMode="row" dataKey="id"
+          :pt="{ table: { style: 'min-width: 50rem' } }">
+          <template #empty> Nenhum usuário foi encontrado. </template>
+          <template #loading> Carregando usuários... </template>
+
+          <Column field="id" header="Código" style="width: 5%">
+            <template #body="{ data }">
+              {{ data.id }}
+            </template>
+
+            <template #filter="{ filterModel, filterCallback }">
+              <InputText v-model="filterModel.value" type="number" @input="filterCallback()" class="font-normal p-2"
+                placeholder="ID" />
+            </template>
+          </Column>
+
+          <Column field="name" header="Nome" style="width: 15%">
+            <template #body="{ data }">
+              {{ data.name }}
+            </template>
+
+            <template #filter="{ filterModel, filterCallback }">
+              <InputText v-model="filterModel.value" type="text" @input="filterCallback()" class="font-normal p-2"
+                placeholder="Filtrar por nome" />
+            </template>
+          </Column>
+
+          <Column field="date" header="Data de Criação" filterField="date" dataType="date" style="width: 15%">
+            <template #body="{ data }">
+              {{ formatDate(data.date) }}
+            </template>
+            <template #filter="{ filterModel, filterCallback }">
+              <Calendar v-model="filterModel.value" @input="filterCallback()" dateFormat="dd/mm/yy"
+                placeholder="dd/mm/yyyy" mask="99/99/9999" showIcon iconDisplay="input" inputClass="p-2" />
+            </template>
+          </Column>
+
+          <Column field="status" header="Status" :showFilterMenu="false" style="width: 15%">
+            <template #body="{ data }">
+              <Tag :value="data.status" :severity="getSeverity(data.status)" />
+            </template>
+            <template #filter="{ filterModel, filterCallback }">
+              <Dropdown v-model="filterModel.value" @change="filterCallback()" :options="status"
+                placeholder="Selecionar" class="p-column-filter" style="min-width: 10rem" :showClear="true">
+                <template #option="slotProps">
+                  <Tag :value="slotProps.option" :severity="getSeverity(slotProps.option)" />
+                </template>
+              </Dropdown>
+            </template>
+          </Column>
+
+          <Column header="Ações" :rowEditor="true" style="width: 5%; min-width: 8rem"></Column>
+        </DataTable>
+
+      </div>
+    </div>
+
     <div v-if="!queryUsers" class="flex justify-start mt-6">
-      <ButtonDefault class="flex bg-primary text-white rounded-lg" :handle-click="changeScreen">
+      <ButtonDefault class="flex bg-primary text-white rounded-lg" :handle-click="backToQueryUser">
         <div class="mr-2">
           <font-awesome-icon :icon="['fas', 'arrow-left']" size="sm" style="color: #FFFFFF;" />
         </div>
@@ -203,7 +391,7 @@ export default defineComponent({
     <ScreenForms v-if="!queryUsers" :handle="saveUsers">
       <div class="flex flex-col gap-9">
         <DefaultCard cardTitle="Informações da Conta">
-          <div class="flex flex-col gap-5.5 p-6.5">
+          <div class="flex flex-col gap-16 p-6.5">
 
             <div>
               <LabelFields label="Nome" for-html="name" />
@@ -216,7 +404,7 @@ export default defineComponent({
               <LabelInformation v-if="!emailValid" label="Email inválido!" color="text-red" />
             </div>
 
-            <div>
+            <div v-if="!editing">
               <LabelFields label="Senha" for-html="password"></LabelFields>
               <div class="relative">
                 <InputForms id="password" :type="inputType" placeholder="Digite uma senha" v-model="password">
@@ -227,7 +415,7 @@ export default defineComponent({
 
               </div>
 
-              <div class="ml-2 mt-2">
+              <div v-if="!editing" class="ml-2 mt-2">
                 <CheckboxOne :readonly="false" v-model="temporaryPassword" id="temporaryPassword"
                   label="Redefinir senha no próximo acesso" />
               </div>
@@ -262,9 +450,12 @@ export default defineComponent({
             <CheckboxOne :readonly="false" v-model="deleteLicenses" id="deleteLicenses" label="" class="ml-4" />
 
             <LabelFields label="Funcionalidades" for-html="functionalities"></LabelFields>
-            <CheckboxOne :readonly="false" v-model="includeFunctionalities" id="includeFunctionalities" label="" class="ml-4" />
-            <CheckboxOne :readonly="false" v-model="editFunctionalities" id="editFunctionalities" label="" class="ml-4" />
-            <CheckboxOne :readonly="false" v-model="deleteFunctionalities" id="deleteFunctionalities" label="" class="ml-4" />
+            <CheckboxOne :readonly="false" v-model="includeFunctionalities" id="includeFunctionalities" label=""
+              class="ml-4" />
+            <CheckboxOne :readonly="false" v-model="editFunctionalities" id="editFunctionalities" label=""
+              class="ml-4" />
+            <CheckboxOne :readonly="false" v-model="deleteFunctionalities" id="deleteFunctionalities" label=""
+              class="ml-4" />
 
             <LabelFields label="Planos" for-html="plans"></LabelFields>
             <CheckboxOne :readonly="false" v-model="includePlans" id="includePlans" label="" class="ml-4" />
@@ -278,7 +469,8 @@ export default defineComponent({
           </div>
 
           <div class="p-6">
-            <CheckboxOne :readonly="false" v-model="confidentialInformation" id="confidentialInformation" label="Informações Confidênciais" />
+            <CheckboxOne :readonly="false" v-model="confidentialInformation" id="confidentialInformation"
+              label="Informações Confidênciais" />
           </div>
         </DefaultCard>
         <div class="flex justify-end">
