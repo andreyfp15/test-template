@@ -391,7 +391,7 @@ export default defineComponent({
     <ScreenForms v-if="!queryUsers" :handle="saveUsers">
       <div class="flex flex-col gap-9">
         <DefaultCard cardTitle="Informações da Conta">
-          <div class="flex flex-col gap-16 p-6.5">
+          <div class="flex flex-col gap-5.5 p-6.5">
 
             <div>
               <LabelFields label="Nome" for-html="name" />

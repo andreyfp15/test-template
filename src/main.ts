@@ -17,6 +17,20 @@ const app = createApp(App)
 app.use(createPinia())
 app.use(router)
 app.use(VueApexCharts)
-app.use(PrimeVue);
+app.use(PrimeVue, {
+    locale: {
+        startsWith: 'Começa por',
+        contains: 'Contém',
+        notContains: 'Não contém',
+        endsWith: 'Termina por',
+        equals: 'Igual a',
+        notEquals: 'Diferente de',
+        noFilter: 'Sem filtro',
+        dateIs: 'Data é',
+        dateBefore: 'Antes de',
+        dateAfter: 'Depois de',
+        dateIsNot: 'Data não é'
+    }
+});
 
 app.mount('#app')
