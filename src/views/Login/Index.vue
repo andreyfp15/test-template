@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faEye, faEyeSlash, faUser } from '@fortawesome/free-solid-svg-icons'
 
-import { validateEmail } from '@/modules/GenericFunctions'
+import { GenericFunctions } from '@/services/GenericFunctions'
 
 import AlertSuccess from '@/components/Alerts/AlertSuccess.vue';
 import AlertError from '@/components/Alerts/AlertError.vue';
@@ -58,7 +58,7 @@ export default {
         },
 
         forgotPassword() {
-            this.emailValid = validateEmail(this.email);
+            this.emailValid = GenericFunctions.validateEmail(this.email);
 
             if (this.emailValid) {
                 if (this.email === this.hardEmail) {

@@ -7,7 +7,7 @@ import TitlePageDefault from '@/components/Titles/TitlePageDefault.vue'
 <script lang="ts">
 import { ref, defineComponent, reactive, toRefs } from 'vue'
 
-import { validateEmail } from '@/modules/GenericFunctions'
+import { GenericFunctions } from '@/services/GenericFunctions'
 
 import ButtonDefault from '@/components/Buttons/ButtonDefault.vue'
 import CheckboxOne from '@/components/Forms/Checkboxes/CheckboxOne.vue'
@@ -17,6 +17,9 @@ import InputForms from '@/components/Forms/InputFields/InputForms.vue'
 import ButtonApresentation from '@/components/Buttons/ButtonApresentation.vue'
 import ScreenForms from '@/layouts/ScreenForms.vue'
 import ModalBase from '@/components/Alerts/ModalBase.vue'
+
+import type { UsersFields, Users } from '@/models/Users'
+import { UserService } from '@/services/UsersService'
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -30,8 +33,6 @@ import InputText from 'primevue/inputtext';
 import Dropdown from 'primevue/dropdown';
 import Calendar from 'primevue/calendar';
 
-import { CustomerService } from '@/assets/CustomerService';
-
 library.add(faPlus, faArrowLeft, faEye, faEyeSlash)
 
 export default defineComponent({
@@ -39,39 +40,7 @@ export default defineComponent({
 
   },
   data() {
-    const usersField = reactive({
-      name: ref(''),
-      email: ref(''),
-      password: ref(''),
-
-      temporaryPassword: ref(false),
-
-      includeClients: ref(false),
-      editClients: ref(false),
-      deleteClients: ref(false),
-
-      includeUsers: ref(false),
-      editUsers: ref(false),
-      deleteUsers: ref(false),
-
-      includeLicenses: ref(false),
-      editLicenses: ref(false),
-      deleteLicenses: ref(false),
-
-      includeFunctionalities: ref(false),
-      editFunctionalities: ref(false),
-      deleteFunctionalities: ref(false),
-
-      includePlans: ref(false),
-      editPlans: ref(false),
-      deletePlans: ref(false),
-
-      includeLogs: ref(false),
-      editLogs: ref(false),
-      deleteLogs: ref(false),
-
-      confidentialInformation: ref(false)
-    })
+    const usersField: UsersFields = reactive(UserService.defaultFields());
 
     return {
       pageTitle: ref('Usuários'),
@@ -90,7 +59,7 @@ export default defineComponent({
 
       ...toRefs(usersField),
 
-      users: [] as any[],
+      users: [] as Users[],
       selectedUser: null as any,
       loading: ref(true),
       filters: {
@@ -106,9 +75,9 @@ export default defineComponent({
     }
   },
   mounted() {
-    this.getDataMedium().then((data: any) => {
+    UserService.getAllUsers().then((data: Users[]) => {
       this.users = this.getUsers(data);
-    });
+    })
 
     this.loading = false;
   },
@@ -176,7 +145,7 @@ export default defineComponent({
     },
 
     saveUsers() {
-      this.emailValid = validateEmail(this.email);
+      this.emailValid = GenericFunctions.validateEmail(this.email);
 
       if (this.emailValid) {
         if ((this.name !== '' && this.name !== null) &&
@@ -209,14 +178,6 @@ export default defineComponent({
       }
     },
 
-    formatDate(value: any) {
-      return value.toLocaleDateString('pt-BR', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric'
-      });
-    },
-
     getUsers(data: any) {
       return [...(data || [])].map((d) => {
         d.date = new Date(d.date);
@@ -225,30 +186,12 @@ export default defineComponent({
       });
     },
 
-    getData() {
-      return [
-        { id: 1, name: 'Allan Lima', date: '2024-04-24', status: 'Ativo', email: 'allan.santos@smart01.com.br', temporaryPassword: true, includeClients: true, editClients: true, deleteClients: false, includeUsers: true, editUsers: true, deleteUsers: false, includeLicenses: true, editLicenses: true, deleteLicenses: true, includeFunctionalities: true, editFunctionalities: true, deleteFunctionalities: true, includePlans: true, editPlans: true, deletePlans: true, includeLogs: true, editLogs: true, deleteLogs: false, confidentialInformation: true },
-        { id: 2, name: 'Luana Mandzirosche', date: '2024-04-23', status: 'Ativo', email: 'luana@smart01.com.br', temporaryPassword: true, includeClients: true, editClients: true, deleteClients: false, includeUsers: true, editUsers: true, deleteUsers: false, includeLicenses: true, editLicenses: true, deleteLicenses: true, includeFunctionalities: true, editFunctionalities: true, deleteFunctionalities: true, includePlans: true, editPlans: true, deletePlans: true, includeLogs: true, editLogs: true, deleteLogs: false, confidentialInformation: true },
-        { id: 3, name: 'Arthur Brites', date: '2024-04-22', status: 'Inativo', email: 'arthur@smart01.com.br', temporaryPassword: true, includeClients: true, editClients: true, deleteClients: false, includeUsers: true, editUsers: true, deleteUsers: false, includeLicenses: true, editLicenses: true, deleteLicenses: true, includeFunctionalities: true, editFunctionalities: true, deleteFunctionalities: true, includePlans: true, editPlans: true, deletePlans: true, includeLogs: true, editLogs: true, deleteLogs: false, confidentialInformation: true },
-        { id: 4, name: 'Giuliano Costa', date: '2024-04-21', status: 'Inativo', email: 'giuliano@smart01.com.br', temporaryPassword: true, includeClients: true, editClients: true, deleteClients: false, includeUsers: true, editUsers: true, deleteUsers: false, includeLicenses: true, editLicenses: true, deleteLicenses: true, includeFunctionalities: true, editFunctionalities: true, deleteFunctionalities: true, includePlans: true, editPlans: true, deletePlans: true, includeLogs: true, editLogs: true, deleteLogs: false, confidentialInformation: true },
-        { id: 5, name: 'Andrey', date: '2024-04-20', status: 'Ativo', email: 'Andrey@smart01.com.br', temporaryPassword: true, includeClients: true, editClients: true, deleteClients: false, includeUsers: true, editUsers: true, deleteUsers: false, includeLicenses: true, editLicenses: true, deleteLicenses: true, includeFunctionalities: true, editFunctionalities: true, deleteFunctionalities: true, includePlans: true, editPlans: true, deletePlans: true, includeLogs: true, editLogs: true, deleteLogs: false, confidentialInformation: true },
-        { id: 6, name: 'Alvanir', date: '2024-04-19', status: 'Ativo', email: 'Alvanir@smart01.com.br', temporaryPassword: true, includeClients: true, editClients: true, deleteClients: false, includeUsers: true, editUsers: true, deleteUsers: false, includeLicenses: true, editLicenses: true, deleteLicenses: true, includeFunctionalities: true, editFunctionalities: true, deleteFunctionalities: true, includePlans: true, editPlans: true, deletePlans: true, includeLogs: true, editLogs: true, deleteLogs: false, confidentialInformation: true },
-        { id: 7, name: 'Lislaine', date: '2024-04-18', status: 'Inativo', email: 'Lislaine@smart01.com.br', temporaryPassword: true, includeClients: true, editClients: true, deleteClients: false, includeUsers: true, editUsers: true, deleteUsers: false, includeLicenses: true, editLicenses: true, deleteLicenses: true, includeFunctionalities: true, editFunctionalities: true, deleteFunctionalities: true, includePlans: true, editPlans: true, deletePlans: true, includeLogs: true, editLogs: true, deleteLogs: false, confidentialInformation: true },
-        { id: 8, name: 'Matheus', date: '2024-04-17', status: 'Inativo', email: 'Matheus@smart01.com.br', temporaryPassword: true, includeClients: true, editClients: true, deleteClients: false, includeUsers: true, editUsers: true, deleteUsers: false, includeLicenses: true, editLicenses: true, deleteLicenses: true, includeFunctionalities: true, editFunctionalities: true, deleteFunctionalities: true, includePlans: true, editPlans: true, deletePlans: true, includeLogs: true, editLogs: true, deleteLogs: false, confidentialInformation: true },
-        { id: 9, name: 'Luiz', date: '2024-04-16', status: 'Ativo', email: 'Luiz@smart01.com.br', temporaryPassword: true, includeClients: true, editClients: true, deleteClients: false, includeUsers: true, editUsers: true, deleteUsers: false, includeLicenses: true, editLicenses: true, deleteLicenses: true, includeFunctionalities: true, editFunctionalities: true, deleteFunctionalities: true, includePlans: true, editPlans: true, deletePlans: true, includeLogs: true, editLogs: true, deleteLogs: false, confidentialInformation: true },
-        { id: 10, name: 'Miguel', date: '2024-04-17', status: 'Ativo', email: 'Miguel@smart01.com.br', temporaryPassword: true, includeClients: true, editClients: true, deleteClients: false, includeUsers: true, editUsers: true, deleteUsers: false, includeLicenses: true, editLicenses: true, deleteLicenses: true, includeFunctionalities: true, editFunctionalities: true, deleteFunctionalities: true, includePlans: true, editPlans: true, deletePlans: true, includeLogs: true, editLogs: true, deleteLogs: false, confidentialInformation: true },
-      ]
-    },
-
-    getDataMedium() {
-      return Promise.resolve(this.getData().slice(0, 10));
-    },
-
     fillFields() {
       this.editing = true;
 
       this.name = this.selectedUser.name;
       this.email = this.selectedUser.email;
+      this.password = this.selectedUser.password;
 
       this.temporaryPassword = this.selectedUser.temporaryPassword;
 
@@ -351,11 +294,11 @@ export default defineComponent({
 
           <Column field="date" header="Data de Criação" filterField="date" dataType="date" style="width: 15%">
             <template #body="{ data }">
-              {{ formatDate(data.date) }}
+              {{ GenericFunctions.formatDate(data.date) }}
             </template>
             <template #filter="{ filterModel, filterCallback }">
               <Calendar v-model="filterModel.value" @input="filterCallback()" dateFormat="dd/mm/yy"
-                placeholder="dd/mm/yyyy" mask="99/99/9999" showIcon iconDisplay="input" inputClass="p-2" />
+                placeholder="dd/mm/yyyy" mask="99/99/9999" inputClass="p-2" />
             </template>
           </Column>
 
