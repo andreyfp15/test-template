@@ -9,6 +9,7 @@ import TitlePageDefault from '@/components/Titles/TitlePageDefault.vue'
 
 import { FeatureService } from '@/services/FeaturesService';
 import type { Feature } from '@/models/Feature';
+import FeaturesRegister from '@/components/Forms/InputFields/FeaturesRegister.vue';
 
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
@@ -65,6 +66,7 @@ export default defineComponent({
 
     <div class="bg-[#d1d1d1] w-full h-0.5 rounded-lg mb-3" />
 
+    <FeaturesRegister :products="products"/>
 
     <div class="rounded-lg border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark mt-6 max-w-full overflow-x-auto">
                 <DataTable v-model:editingRows="editingRows" v-model:filters="filters"  :value="features" stripedRows paginator
@@ -89,7 +91,7 @@ export default defineComponent({
                     </Column>
                     <Column field="name" header="Nome da Funcionalidade" style="width: 15%">
                       <template #editor="{ data, field }">
-                        <InputText v-model="data[field]" />
+                        <InputText v-model="data[field]" class="p-2"/>
                       </template>
                     
                       <template #filter="{ filterModel, filterCallback }">
