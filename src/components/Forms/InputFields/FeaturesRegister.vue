@@ -1,40 +1,58 @@
 <script lang="ts">
 
-import Dropdown from 'primevue/dropdown';
-import InputGroup from '../InputGroup.vue';
-import ButtonDefault from '@/components/Buttons/ButtonDefault.vue';
+import type { Option } from '@/models/Option';
+import { defineComponent, ref } from 'vue';
+import DefaultCard from '../DefaultCard.vue';
+import ButtonApresentation from '@/components/Buttons/ButtonApresentation.vue';
+import DropDown from '../DropDownMenu.vue';
+import InputForms from './InputForms.vue';
+import LabelFields from '../Labels/LabelFields.vue'
 
-export default {
-    components:{
-        Dropdown,
-        InputGroup,
-        ButtonDefault
+export default defineComponent({
+    components: {
+        InputForms,
+        DefaultCard,
+        ButtonApresentation,
+        DropDown,
+        LabelFields
     },
-    props:{
-        products: Array
+    props: {
+        products:{
+          type: Array as () => Option[],
+          required: true  
+        } 
     },
-    data(){
+    data() {
         return {
+            selectedProduct: ref(),
+            featureName: ''
         }
     },
-    methods:{
-        register(){
+    methods: {
+        register() {
+            console.log(this.selectedProduct)
         }
     }
-}
+});
 </script>
 <template>
-        <form class="w-full">
-            <div class="p-5 justify-start flex gap-3 rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-                <InputGroup label="Nome da funcionalidade" type="text" placeholder="Insira o nome da funcionalidade"
-                customClasses="w-full xl:w-1/4" />
-                <div class="">
-                    <label class="mb-1 block text-black dark:text-white">Produtos</label>
-                    <Dropdown :options="products"></Dropdown>
+    <form class="w-full flex justify-start">
+        <DefaultCard class="w-full" disableHeader>
+            <div class="p-6 grid grid-cols-2">
+                <div class="flex justify-start gap-10">
+                    <div>
+                        <LabelFields label="Nome da funcionalidade" for-html="featureName" />
+                        <InputForms id="featureName" type="text" placeholder="Digite seu nome" v-model="featureName" />
+                    </div>
+                    <div>
+                        <LabelFields label="Produto" for-html="product"/>
+                        <DropDown id="product" :options="products"/>
+                    </div>
                 </div>
-                <ButtonDefault customClasses="flex-end bg-primary text-white rounded-lg" :handle-click="register">
-                    Cadastrar Funcionalidade
-                </ButtonDefault>
+                <div class="flex justify-end">
+                    <ButtonApresentation label="+ Adicionar"/>
+                </div>
             </div>
-        </form>
+        </DefaultCard>
+    </form>
 </template>

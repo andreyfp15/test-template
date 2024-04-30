@@ -15,6 +15,12 @@ export const FeatureService =
                 createdAt: new Date('20-01-2024'),
                 name: 'Expedição',
                 product: 'WMS'
+            },
+            {
+                id: 3,
+                createdAt: new Date('20-01-2024'),
+                name: 'Expedição',
+                product: 'CRM'
             }
         ]
     },
