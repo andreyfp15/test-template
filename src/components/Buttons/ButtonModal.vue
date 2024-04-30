@@ -8,7 +8,8 @@ export default {
     buttonColor: {
       type: String,
       default: '#34D399'
-    }
+    },
+    handleClick: Function
   },
   emits: ['click-event']
 };
@@ -17,6 +18,6 @@ export default {
 <template>
   <input type="button" 
          :value="label"
-         @click="$emit('click-event')" 
+         @click="handleClick ? handleClick() : $emit('click-event')" 
          :class="`cursor-pointer rounded-lg border-[${buttonColor}] bg-[${buttonColor}] p-4 font-medium text-white transition hover:bg-opacity-50`" />
 </template>

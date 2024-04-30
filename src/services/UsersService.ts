@@ -26,6 +26,8 @@ export const UserService =
             email: '',
             password: '',
 
+            status: true,
+
             temporaryPassword: false,
 
             includeClients: false,
@@ -52,7 +54,7 @@ export const UserService =
             editLogs: false,
             deleteLogs: false,
 
-            confidentialInformation: false,
+            confidentialInformation: false
         }
     }
 }

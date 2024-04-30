@@ -40,6 +40,8 @@ export interface UsersFields {
     email: string,
     password: string,
 
+    status: boolean,
+
     temporaryPassword: boolean,
 
     includeClients: boolean,
