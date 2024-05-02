@@ -146,7 +146,7 @@ export default defineComponent({
               {{ GenericFunctions.formatDate(data.date) }}
             </template>
             <template #filter="{ filterModel, filterCallback }">
-              <Calendar v-model="filterModel.value" @input="filterCallback()" dateFormat="dd/mm/yy" 
+              <Calendar v-model="filterModel.value" dateFormat="dd/mm/yy" :manual-input="false" @date-select="filterCallback()"
                 placeholder="dd/mm/yyyy" mask="99/99/9999" inputClass="p-2"  />
             </template>
           </Column>

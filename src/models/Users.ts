@@ -2,7 +2,7 @@ export interface Users {
     id: Number,
     name: string,
     date: string, 
-    status: 'Ativo' | 'Inativo', 
+    status: string,
     email: string,
     password: string,
 

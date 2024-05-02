@@ -25,7 +25,6 @@ import { UserService } from '@/services/UsersService'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faPlus, faArrowLeft, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
-import { isEmptyStatement } from 'typescript';
 
 library.add(faPlus, faArrowLeft, faEye, faEyeSlash)
 
@@ -54,7 +53,11 @@ export default defineComponent({
 
             ...toRefs(usersField),
 
-            selectedUser: null as any
+            defaultFields: UserService.defaultFields(),
+
+            selectedUser: null as any,
+
+            editing: false
         }
     },
     async mounted() {
@@ -63,7 +66,6 @@ export default defineComponent({
         if (userId && typeof userId === 'string' && userId.trim() !== '') {
             this.pageTitle = 'Atualizar Dados';
 
-            console.log(userId)
             const decryptedId = GenericFunctions.decryptIdentifier(decodeURIComponent(userId));
 
             const users = await UserService.getAllUsers();
@@ -76,10 +78,14 @@ export default defineComponent({
             }
 
             this.fillFields();
+
+            this.editing = true;
         }
     },
     methods: {
         resetFields() {
+
+
             this.name = ''
             this.email = ''
             this.password = ''
@@ -113,6 +119,8 @@ export default defineComponent({
             this.deleteLogs = false
 
             this.confidentialInformation = false
+
+
         },
 
         backToQueryUser() {
@@ -238,7 +246,7 @@ export default defineComponent({
                             <LabelInformation v-if="!emailValid" label="Email inválido!" color="text-red" />
                         </div>
 
-                        <div>
+                        <div v-if="!editing">
                             <LabelFields label="Senha" for-html="password"></LabelFields>
                             <div class="relative">
                                 <InputForms id="password" :type="inputType" placeholder="Digite uma senha"
@@ -255,19 +263,18 @@ export default defineComponent({
                                 <CheckboxOne :readonly="false" v-model="temporaryPassword" id="temporaryPassword"
                                     label="Redefinir senha no próximo acesso" />
                             </div>
-
-                            <div class="ml-2 mt-2">
-                                <CheckboxOne :readonly="false" v-model="status" id="status" label="Ativo" />
-                            </div>
                         </div>
 
+                        <div class="ml-2">
+                            <CheckboxOne :readonly="false" v-model="status" id="status" label="Ativo" />
+                        </div>
                     </div>
                 </DefaultCard>
             </div>
 
             <div class="flex flex-col gap-9">
                 <DefaultCard cardTitle="Permissões de Usuário">
-                    <div class="flex gap-5 p-6 grid grid-cols-4 ">
+                    <div class="gap-5 p-6 grid grid-cols-4 ">
                         <label />
                         <LabelFields label="Inclusão" for-html="include" />
                         <LabelFields label="Edição" for-html="edit" />
