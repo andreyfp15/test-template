@@ -29,7 +29,11 @@ export default {
             required: true
         },
     },
-    emits: ['close-modal']
+    methods: {
+        handleOkClick() {
+            this.$emit('ok-click'); // Emitindo um evento quando o botão é clicado
+        }
+    }
 };
 </script>
 
@@ -46,7 +50,7 @@ export default {
                             <div
                                 :class="`mr-5 flex h-9 w-full max-w-[36px] min-w-[36px] items-center justify-center rounded-lg bg-[${borderColor}]`">
                                 <!-- Uma imagem aqui seria bem vinda -->
-                                <slot name="slot1"/>
+                                <slot name="slot1" />
                             </div>
                             <div class="w-full">
                                 <h5 class="mb-3 text-lg font-bold text-black dark:text-white">
@@ -61,8 +65,8 @@ export default {
 
                         <div class="w-full mt-10 flex justify-end">
                             <!-- Button -->
-                            <modal-button :label="'OK'" :buttonColor="borderColor" @click-event="$emit('close-modal')" />
-                            <slot name="slot2"/>
+                            <modal-button :label="'OK'" :buttonColor="borderColor" @click-event="handleOkClick" />
+                            <slot name="slot2" />
                         </div>
                     </div>
                 </Transition>
