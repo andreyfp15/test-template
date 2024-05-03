@@ -6,7 +6,14 @@ export default {
     components: {
         ModalButton
     },
+    emits: ['ok-click', 'no-click'],
     props: {
+        okTitle:{
+            type: String
+        },
+        noTitle:{
+            type: String
+        },
         message: {
             type: String,
             required: true
@@ -32,6 +39,9 @@ export default {
     methods: {
         handleOkClick() {
             this.$emit('ok-click'); // Emitindo um evento quando o botão é clicado
+        },
+        handleNoClick(){
+            this.$emit('no-click'); // Emitindo um evento quando o botão é clicado
         }
     }
 };
@@ -44,7 +54,7 @@ export default {
 
                 <Transition name="modal-inner">
                     <div v-show="modalActive"
-                        :class="`absolute fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 justify-center border-l-6 border-[${borderColor}] bg-[${backgroundColor}] px-7 py-8 shadow-md dark:bg-[#676767] md:p-9 max-w-[550px] max-h-[400px] overflow-y-auto break-words z-50`">
+                        :class="`fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 justify-center border-l-6 border-[${borderColor}] bg-[${backgroundColor}] px-7 py-8 shadow-md dark:bg-[#676767] md:p-9 max-w-[550px] max-h-[400px] overflow-y-auto break-words z-50`">
 
                         <div class="flex mr-15">
                             <div
@@ -65,7 +75,8 @@ export default {
 
                         <div class="w-full mt-10 flex justify-end">
                             <!-- Button -->
-                            <modal-button :label="'OK'" :buttonColor="borderColor" @click-event="handleOkClick" />
+                            <modal-button :label="okTitle ?? 'OK'" :buttonColor="borderColor" @click-event="handleOkClick" />
+                            <modal-button v-if="noTitle !== undefined && noTitle !== null" :label="noTitle ?? ''" :buttonColor="borderColor" @click-event="handleNoClick" />
                             <slot name="slot2" />
                         </div>
                     </div>

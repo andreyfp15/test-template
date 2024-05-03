@@ -333,7 +333,7 @@ export default defineComponent({
             </template>
         </ModalBase>
 
-        <ModalBase :message="messageModalError" :modal-active="modalErrorActive" title="Erro" border-color="#F87171"
+        <ModalBase :message="messageModalError" :modal-active="modalErrorActive" title="Erro" border-color="#FFC800"
             background-color="#F2E1E5" @ok-click="toggleErrorModal">
             <template v-slot:slot1>
                 <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">

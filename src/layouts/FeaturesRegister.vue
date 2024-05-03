@@ -2,18 +2,18 @@
 
 import type { Option } from '@/models/Option';
 import { defineComponent, ref } from 'vue';
-import DefaultCard from './DefaultCard.vue';
+import DefaultCard from '@/components/Forms/DefaultCard.vue';
 import ButtonApresentation from '@/components/Buttons/ButtonApresentation.vue';
-import DropDown from './DropDownMenu.vue';
-import InputForms from './InputFields/InputForms.vue';
-import LabelFields from './Labels/LabelFields.vue'
+import DropDownMenu from '@/components/Forms/DropDownMenu.vue';
+import InputForms from '@/components/Forms/InputFields/InputForms.vue';
+import LabelFields from '@/components/Forms/Labels/LabelFields.vue';
 
 export default defineComponent({
     components: {
         InputForms,
         DefaultCard,
         ButtonApresentation,
-        DropDown,
+        DropDownMenu,
         LabelFields
     },
     props: {
@@ -24,19 +24,19 @@ export default defineComponent({
     },
     data() {
         return {
-            selectedProduct: ref(),
-            featureName: ''
+            selectedProduct: ref(''),
+            featureName: ref('')
         }
     },
     methods: {
         register() {
-            console.log(this.selectedProduct)
+            console.log(this.featureName, this.selectedProduct);
         }
     }
 });
 </script>
 <template>
-    <form class="rounded-lg border  border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark w-full flex justify-start ">
+    <form :on-submit="register" class="rounded-lg border  border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark w-full flex justify-start">
         <DefaultCard class="w-full" disableHeader>
             <div class="p-6 grid grid-cols-2">
                 <div class="flex justify-start gap-10">
@@ -46,7 +46,7 @@ export default defineComponent({
                     </div>
                     <div>
                         <LabelFields label="Produto" for-html="product"/>
-                        <DropDown id="product" :options="products"/>
+                        <DropDownMenu id="product" :options="products"/>
                     </div>
                 </div>
                 <div class="flex justify-end">
