@@ -2,11 +2,11 @@
 
 import type { Option } from '@/models/Option';
 import { defineComponent, ref } from 'vue';
-import DefaultCard from '../DefaultCard.vue';
+import DefaultCard from './DefaultCard.vue';
 import ButtonApresentation from '@/components/Buttons/ButtonApresentation.vue';
-import DropDown from '../DropDownMenu.vue';
-import InputForms from './InputForms.vue';
-import LabelFields from '../Labels/LabelFields.vue'
+import DropDown from './DropDownMenu.vue';
+import InputForms from './InputFields/InputForms.vue';
+import LabelFields from './Labels/LabelFields.vue'
 
 export default defineComponent({
     components: {
@@ -36,7 +36,7 @@ export default defineComponent({
 });
 </script>
 <template>
-    <form class="w-full flex justify-start">
+    <form class="rounded-lg border  border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark w-full flex justify-start ">
         <DefaultCard class="w-full" disableHeader>
             <div class="p-6 grid grid-cols-2">
                 <div class="flex justify-start gap-10">

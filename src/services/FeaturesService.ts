@@ -6,19 +6,19 @@ export const FeatureService =
         return [
             {
                 id: 1,
-                createdAt: new Date('20-12-2023'),
+                createdAt: new Date('2023-12-20'),
                 name: 'Separação',
                 product: 'WMS'
             },
             {
                 id: 2,
-                createdAt: new Date('20-01-2024'),
+                createdAt: new Date('2024-01-20'),
                 name: 'Expedição',
                 product: 'WMS'
             },
-            {
+            { 
                 id: 3,
-                createdAt: new Date('20-01-2024'),
+                createdAt: new Date('2024-01-20'),
                 name: 'Expedição',
                 product: 'CRM'
             }

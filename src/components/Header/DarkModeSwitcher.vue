@@ -1,7 +1,12 @@
 <script setup lang="ts">
 import { useDarkModeStore } from '@/stores/darkMode'
+import { onMounted } from 'vue'
 
 const darkModeStore = useDarkModeStore()
+
+onMounted(() => {
+  darkModeStore.togglePrimeVueTheme()
+})
 </script>
 
 <template>
