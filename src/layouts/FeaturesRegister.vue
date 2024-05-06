@@ -7,6 +7,7 @@ import ButtonApresentation from '@/components/Buttons/ButtonApresentation.vue';
 import DropDownMenu from '@/components/Forms/DropDownMenu.vue';
 import InputForms from '@/components/Forms/InputFields/InputForms.vue';
 import LabelFields from '@/components/Forms/Labels/LabelFields.vue';
+import type { Feature } from '@/models/Feature';
 
 export default defineComponent({
     components: {
@@ -16,6 +17,7 @@ export default defineComponent({
         DropDownMenu,
         LabelFields
     },
+    emits: ['register'],
     props: {
         products:{
           type: Array as () => Option[],
@@ -30,23 +32,23 @@ export default defineComponent({
     },
     methods: {
         register() {
-            console.log(this.featureName, this.selectedProduct);
+            this.$emit("register", { name:this.featureName, product:this.selectedProduct, createdAt: new Date() } as Feature);
         }
     }
 });
 </script>
 <template>
-    <form :on-submit="register" class="rounded-lg border  border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark w-full flex justify-start">
+    <form @submit.prevent="register" class="rounded-lg border  border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark w-full flex justify-start">
         <DefaultCard class="w-full" disableHeader>
             <div class="p-6 grid grid-cols-2">
                 <div class="flex justify-start gap-10">
                     <div>
                         <LabelFields label="Nome da funcionalidade" for-html="featureName" />
-                        <InputForms id="featureName" type="text" placeholder="Digite seu nome" v-model="featureName" />
+                        <InputForms v-model="featureName" id="featureName" type="text" placeholder="Digite seu nome" />
                     </div>
                     <div>
                         <LabelFields label="Produto" for-html="product"/>
-                        <DropDownMenu id="product" :options="products"/>
+                        <DropDownMenu v-model="selectedProduct" id="product" :options="products"/>
                     </div>
                 </div>
                 <div class="flex justify-end">

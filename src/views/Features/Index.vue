@@ -72,6 +72,10 @@ export default defineComponent({
       if(this.toDelete !== 0)
         this.features = this.features.filter(i => i.id != this.toDelete);
     },
+    saveFeat(feat: Feature){
+        feat.id = this.features.length > 0 ? (this.features[this.features.length - 1].id) + 1 : 1;
+        this.features.push(feat);
+    },
     onRowEditSave(event: any) {
           let { newData, index } = event;
           this.features[index] = newData;
@@ -143,7 +147,7 @@ export default defineComponent({
     </TitlePageDefault>
 
     <div class="bg-[#d1d1d1] w-full h-0.5 rounded-lg mb-3" />
-    <FeaturesRegister :products="products" />
+    <FeaturesRegister @register="saveFeat" :products="products" />
     <div
       class="rounded-lg border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark mt-6 max-w-full overflow-x-auto">
       <DataTable v-model:editingRows="editingRows" v-model:filters="filters" :value="features" stripedRows paginator
