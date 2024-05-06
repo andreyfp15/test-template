@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, reactive, ref, toRefs } from 'vue'
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
 import TitlePageDefault from '@/components/Titles/TitlePageDefault.vue'
 </script>
@@ -8,9 +8,11 @@ import TitlePageDefault from '@/components/Titles/TitlePageDefault.vue'
 
 import { GenericFunctions } from '@/services/GenericFunctions'
 import { FeatureService } from '@/services/FeaturesService';
+import { ModalService } from '@/services/ModalService';
 
 import type { Feature } from '@/models/Feature';
 import type { Option } from '@/models/Option';
+import type { ModalInfo } from '@/models/ModalInfo';
 
 import FeaturesRegister from '@/layouts/FeaturesRegister.vue';
 import ModalBase from '@/components/Alerts/ModalBase.vue'
@@ -25,18 +27,17 @@ import Calendar from 'primevue/calendar';
 export default defineComponent({
   components: {},
   data() {
+    const modalInfo: ModalInfo = reactive(ModalService.getFeatureModalInfo(''));
     return {
       pageTitle: ref('Funcionalidades'),
       features: [] as Feature[],
       loading: ref(true),
       
-      modalTitle: ref(''),
-      modalActive: ref(false),
-      modalMessage: ref(''),
-      modalBorderColor: ref('#DDEFEB'),
+      modalInfo:{
+        ...toRefs(modalInfo)
+      },
 
-      okTitle: ref('ok'),
-      noTitle: ref(),
+      modalActive: ref(false),
 
       toDelete: ref(0),
 
@@ -68,13 +69,20 @@ export default defineComponent({
   },
   methods: {
     deleteRow() {
-      console.log(this.toDelete)
       if(this.toDelete !== 0)
         this.features = this.features.filter(i => i.id != this.toDelete);
     },
     saveFeat(feat: Feature){
-        feat.id = this.features.length > 0 ? (this.features[this.features.length - 1].id) + 1 : 1;
-        this.features.push(feat);
+        if(feat.name !== '')
+        {
+          feat.id = this.features.length > 0 ? (this.features[this.features.length - 1].id) + 1 : 1;
+          this.toggleModal('registered')
+          this.features.push(feat);
+        }
+        else
+        {
+          this.toggleModal('emptyNameError')
+        }
     },
     onRowEditSave(event: any) {
           let { newData, index } = event;
@@ -85,38 +93,18 @@ export default defineComponent({
       if(id !== undefined){
         this.toDelete = id;
       }
-      switch(modalType){
-        case 'warning':
-          this.modalTitle = 'Alerta';
-          this.modalMessage = 'Deseja apagar essa funcionalidade?';
-          this.modalBorderColor = '#FFC800';
-          this.okTitle = 'Sim';
-          this.noTitle = 'Não';
-          break;
-        case 'error':
-          this.modalTitle = 'Erro';
-          this.modalMessage = 'É necessário desvincular essa funcionalidade de um plano antes de apagá-la!';
-          this.modalBorderColor = '#F87171';
-          this.okTitle = 'Ok';
-          this.noTitle = null;
-          break;
-        case 'success':
-          this.modalTitle = 'Sucesso!';
-          this.modalMessage = 'Funcionalidade apagada com sucesso!';
-          this.modalBorderColor = '#34D399';
-          this.okTitle = 'Ok';
-          this.noTitle = null;
-          break; 
-        default:
-          this.deleteRow();
-          this.toDelete = 0;
-          break;
+      if(modalType !== undefined)
+        this.modalInfo = ModalService.getFeatureModalInfo(modalType);
+      else
+      {
+        this.deleteRow();
+        this.toDelete = 0;
       }
       this.modalActive = !this.modalActive;
     },
     closeModal() 
     {
-        if(this.modalTitle === 'Alerta')
+        if(this.modalInfo.title === 'Alerta')
         {
           this.modalActive = !this.modalActive;
           this.toggleModal('success');
@@ -130,7 +118,7 @@ export default defineComponent({
         this.toDelete = 0
         this.modalActive = !this.modalActive;
     },
-    },
+  },
   }
 );
 </script>
@@ -222,8 +210,8 @@ export default defineComponent({
     </div>
 
 
-    <ModalBase :message="modalMessage" :modal-active="modalActive" :title="modalTitle"
-        :border-color="modalBorderColor" background-color="#DDEFEB" :okTitle="okTitle" :noTitle="noTitle" @ok-click="closeModal" @no-click="cancelDelete">
+    <ModalBase :message="modalInfo.message" :modal-active="modalActive" :title="modalInfo.title"
+        :border-color="modalInfo.borderColor" background-color="#DDEFEB" :okTitle="modalInfo.okTitle" :noTitle="modalInfo.noTitle" @ok-click="closeModal" @no-click="cancelDelete">
         <template v-slot:slot1>
             <svg width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
