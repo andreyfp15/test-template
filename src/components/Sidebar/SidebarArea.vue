@@ -123,9 +123,9 @@ const menuGroups = ref([
       '-translate-x-full': !sidebarStore.isSidebarOpen
     }" ref="target">
 
-    <div class="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
+    <div class="flex items-center justify-between gap-2 px-6 py-4 lg:py-5">
       <router-link to="/">
-        <img src="@/assets/images/logo/logo.png" alt="Logo" />
+        <img class="h-15 w-auto" src="@/assets/images/logo/logo.png" alt="Logo" />
       </router-link>
 
       <button class="block lg:hidden" @click="sidebarStore.isSidebarOpen = false">
@@ -138,9 +138,9 @@ const menuGroups = ref([
       </button>
     </div>
 
-    <div class="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear">
+    <div class="no-scrollbar flex flex-col justify-between overflow-y-auto duration-300 ease-linear">
 
-      <nav class="mt-5 py-4 px-2 lg:mt-4">
+      <nav class="py-2 px-2 lg:mt-4">
         <template v-for="menuGroup in menuGroups" :key="menuGroup.name">
           <div>
 
@@ -152,9 +152,9 @@ const menuGroups = ref([
           </div>
         </template>
       </nav>
-
-      <div class="mx-auto w-full max-w-60 pt-6 px-2 text-left">
-        <h3 class="mb-1 font-semibold text-white">Versão 1.0.0</h3>
+      
+      <div class="mx-auto w-full max-w-60 px-2 text-left fixed bottom-10">
+        <h3 class="ml-3 text-gray">Versão 1.0.0</h3>
       </div>
 
     </div>

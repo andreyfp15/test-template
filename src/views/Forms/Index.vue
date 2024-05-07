@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
 import TitlePageDefault from '@/components/Titles/TitlePageDefault.vue'
 import InputGroup from '@/components/Forms/InputGroup.vue'
@@ -11,7 +11,7 @@ import SwitchThree from '@/components/Forms/Switchers/SwitchThree.vue'
 import SwitchFour from '@/components/Forms/Switchers/SwitchFour.vue'
 import CheckboxFive from '@/components/Forms/Checkboxes/CheckboxFive.vue'
 import CheckboxFour from '@/components/Forms/Checkboxes/CheckboxFour.vue'
-import CheckboxOne from '@/components/Forms/Checkboxes/CheckboxOne.vue'
+
 import CheckboxThree from '@/components/Forms/Checkboxes/CheckboxThree.vue'
 import CheckboxTwo from '@/components/Forms/Checkboxes/CheckboxTwo.vue'
 import DatePickerOne from '@/components/Forms/DatePicker/DatePickerOne.vue'
@@ -21,6 +21,23 @@ import SelectGroupOne from '@/components/Forms/SelectGroup/SelectGroupOne.vue'
 
 const pageTitle = ref('Exemplos formulários')
 
+</script>
+
+<script lang="ts">
+import { reactive, ref, toRefs } from 'vue'
+import CheckboxOne from '@/components/Forms/Checkboxes/CheckboxOne.vue'
+
+  export default {
+    data () {
+      const data = reactive({
+        checkOne: ref(false),
+      })
+
+      return {
+        ...toRefs(data)
+      }
+    }
+  }
 </script>
 
 <template>
@@ -138,11 +155,11 @@ const pageTitle = ref('Exemplos formulários')
         <!-- Checkbox and radio -->
         <DefaultCard cardTitle="Checkbox and radio">
           <div class="flex flex-col gap-5.5 p-6.5">
-            <CheckboxOne />
-            <CheckboxTwo />
+            <CheckboxOne :readonly="false" v-model="checkOne" id="checkBoxOne" label="" />
+            <CheckboxTwo id="checktwo" value="checktwo"/>
             <CheckboxThree />
             <CheckboxFour />
-            <CheckboxFive />
+            <CheckboxFive id="checkfive" value="checkfive" />
           </div>
         </DefaultCard>
         <!-- Checkbox and radio -->

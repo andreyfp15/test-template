@@ -8,6 +8,9 @@ import Features from '@/views/Features/Index.vue'
 import Plans from '@/views/Plans/Index.vue'
 import Forms from '@/views/Forms/Index.vue'
 import Tables from '@/views/Tables/Index.vue'
+import PasswordReset from '@/views/PasswordReset/Index.vue'
+import UserRegister from '@/views/Users/UserRegister.vue'
+import PlanRegister from '@/views/Plans/PlanRegister.vue'
 
 const routes = [
   {
@@ -16,6 +19,14 @@ const routes = [
     component: Login,
     meta: {
       title: 'Login'
+    },
+  },
+  {
+    path: '/passwordreset',
+    name: 'passwordreset',
+    component: PasswordReset,
+    meta: {
+      title: 'Redefinir Senha'
     },
   },
   {
@@ -43,6 +54,14 @@ const routes = [
     },
   },
   {
+    path: '/users/register/:id?',
+    name: 'usersregister',
+    component: UserRegister,
+    meta: {
+      title: 'Cadastro de Usuários'
+    },
+  },
+  {
     path: '/features',
     name: 'features',
     component: Features,
@@ -54,6 +73,14 @@ const routes = [
     path: '/plans',
     name: 'plans',
     component: Plans,
+    meta: {
+      title: 'Planos'
+    },
+  },
+  {
+    path: '/plans/register/:id?',
+    name: 'plansregister',
+    component: PlanRegister,
     meta: {
       title: 'Planos'
     },
