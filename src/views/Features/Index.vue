@@ -203,8 +203,8 @@ export default defineComponent({
               placeholder="dd/mm/yyyy" mask="99/99/9999" inputClass="p-2" />
           </template>
         </Column>
-        <Column header-style="text-align: right !important" header="Ações" :rowEditor="true" style="width: 5%; min-width: 8rem; text-align: right" />
-        <Column style="width: 5%; min-width: 8rem; text-align: left" >
+        <Column header="Editar" :rowEditor="true" style="width: 5%; min-width: 8rem;" />
+        <Column header="Excluir" style="width: 5%; min-width: 8rem; text-align: left" >
           <template #body="{ data }">
             <button v-on:click="toggleModal('warning',data.id)">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
