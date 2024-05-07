@@ -31,5 +31,17 @@ export const GenericFunctions = {
         const decryptedId = CryptoJS.AES.decrypt(id, key).toString(CryptoJS.enc.Utf8);
 
         return parseInt(decryptedId);
+    },
+
+    formatMoney(amount: any) {
+        const formattedAmount = 'R$' + amount.toFixed(2).replace('.', ',');
+        return formattedAmount;
+    },
+
+    formatMoneyField(amount: any) {
+        let cleanedValue = amount.value.replace(/[^\d.,]/g, '');
+        cleanedValue = cleanedValue.replace('.', ',');
+
+        return cleanedValue;
     }
 }

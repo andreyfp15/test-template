@@ -1,5 +1,5 @@
 export interface Option
 {
-    key: string,
+    key: number,
     value: string
 }

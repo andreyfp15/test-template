@@ -51,7 +51,9 @@ export default defineComponent({
             messageModalError: ref(''),
             messageModalSuccess: ref(''),
 
-            ...toRefs(usersField),
+            users: {
+                ...toRefs(usersField)
+            },
 
             defaultFields: UserService.defaultFields(),
 
@@ -84,43 +86,7 @@ export default defineComponent({
     },
     methods: {
         resetFields() {
-
-
-            this.name = ''
-            this.email = ''
-            this.password = ''
-
-            this.status = true
-
-            this.temporaryPassword = false
-
-            this.includeClients = false
-            this.editClients = false
-            this.deleteClients = false
-
-            this.includeUsers = false
-            this.editUsers = false
-            this.deleteUsers = false
-
-            this.includeLicenses = false
-            this.editLicenses = false
-            this.deleteLicenses = false
-
-            this.includeFunctionalities = false
-            this.editFunctionalities = false
-            this.deleteFunctionalities = false
-
-            this.includePlans = false
-            this.editPlans = false
-            this.deletePlans = false
-
-            this.includeLogs = false
-            this.editLogs = false
-            this.deleteLogs = false
-
-            this.confidentialInformation = false
-
-
+            this.users = UserService.defaultFields()
         },
 
         backToQueryUser() {
@@ -143,20 +109,14 @@ export default defineComponent({
         },
 
         saveUsers() {
-            this.emailValid = GenericFunctions.validateEmail(this.email);
+            this.emailValid = GenericFunctions.validateEmail(this.users.email);
 
             if (this.emailValid) {
-                if ((this.name !== '' && this.name !== null) &&
-                    (this.password !== '' && this.password !== null)) {
-                    // if (this.temporaryPassword === true) {
+                if ((this.users.name !== '' && this.users.name !== null) &&
+                    (this.users.password !== '' && this.users.password !== null)) {
 
                     this.messageModalSuccess = 'Cadastro realizado com sucesso.';
                     this.toggleSuccessModal();
-
-                    // } else {
-                    //   this.messageModalError = 'temporaryPassword';
-                    //   this.toggleErrorModal();
-                    // }
                 } else {
                     this.messageModalError = 'É necessário que os campos estejam preenchidos!';
                     this.toggleErrorModal();
@@ -165,39 +125,7 @@ export default defineComponent({
         },
 
         fillFields() {
-            this.name = this.selectedUser.name;
-            this.email = this.selectedUser.email;
-            this.password = this.selectedUser.password;
-
-            this.status = this.selectedUser.status;
-
-            this.temporaryPassword = this.selectedUser.temporaryPassword;
-
-            this.includeClients = this.selectedUser.includeClients;
-            this.editClients = this.selectedUser.editClients;
-            this.deleteClients = this.selectedUser.deleteClients;
-
-            this.includeUsers = this.selectedUser.includeUsers;
-            this.editUsers = this.selectedUser.editUsers;
-            this.deleteUsers = this.selectedUser.deleteUsers;
-
-            this.includeLicenses = this.selectedUser.includeLicenses;
-            this.editLicenses = this.selectedUser.editLicenses;
-            this.deleteLicenses = this.selectedUser.deleteLicenses;
-
-            this.includeFunctionalities = this.selectedUser.includeFunctionalities;
-            this.editFunctionalities = this.selectedUser.editFunctionalities;
-            this.deleteFunctionalities = this.selectedUser.deleteFunctionalities;
-
-            this.includePlans = this.selectedUser.includePlans;
-            this.editPlans = this.selectedUser.editPlans;
-            this.deletePlans = this.selectedUser.deletePlans;
-
-            this.includeLogs = this.selectedUser.includeLogs;
-            this.editLogs = this.selectedUser.editLogs;
-            this.deleteLogs = this.selectedUser.deleteLogs;
-
-            this.confidentialInformation = this.selectedUser.confidentialInformation;
+            this.users = this.selectedUser
         },
 
         handleOkClickModal() {
@@ -237,12 +165,12 @@ export default defineComponent({
 
                         <div>
                             <LabelFields label="Nome" for-html="name" />
-                            <InputForms id="name" type="text" placeholder="Digite seu nome" v-model="name" />
+                            <InputForms id="name" type="text" placeholder="Digite seu nome" v-model="users.name" />
                         </div>
 
                         <div>
                             <LabelFields label="E-mail" for-html="email"></LabelFields>
-                            <InputForms id="email" type="text" placeholder="Digite seu email" v-model="email" />
+                            <InputForms id="email" type="text" placeholder="Digite seu email" v-model="users.email" />
                             <LabelInformation v-if="!emailValid" label="Email inválido!" color="text-red" />
                         </div>
 
@@ -250,7 +178,7 @@ export default defineComponent({
                             <LabelFields label="Senha" for-html="password"></LabelFields>
                             <div class="relative">
                                 <InputForms id="password" :type="inputType" placeholder="Digite uma senha"
-                                    v-model="password">
+                                    v-model="users.password">
                                     <button @click.prevent="togglePasswordVisibility"
                                         class="absolute right-3 mt-2.5 cursor-pointer">
                                         <font-awesome-icon :icon="eyeIcon" size="lg" style="color: #bebebe;" />
@@ -260,13 +188,13 @@ export default defineComponent({
                             </div>
 
                             <div class="ml-2 mt-2">
-                                <CheckboxOne :readonly="false" v-model="temporaryPassword" id="temporaryPassword"
+                                <CheckboxOne :readonly="false" v-model="users.temporaryPassword" id="temporaryPassword"
                                     label="Redefinir senha no próximo acesso" />
                             </div>
                         </div>
 
                         <div class="ml-2">
-                            <CheckboxOne :readonly="false" v-model="status" id="status" label="Ativo" />
+                            <CheckboxOne :readonly="false" v-model="users.status" id="status" label="Ativo" />
                         </div>
                     </div>
                 </DefaultCard>
@@ -281,45 +209,45 @@ export default defineComponent({
                         <LabelFields label="Exclusão" for-html="delete" />
 
                         <LabelFields label="Clientes" for-html="clients" />
-                        <CheckboxOne :readonly="false" v-model="includeClients" id="includeClients" label=""
+                        <CheckboxOne :readonly="false" v-model="users.includeClients" id="includeClients" label=""
                             class="ml-4" />
-                        <CheckboxOne :readonly="false" v-model="editClients" id="editClients" label="" class="ml-4" />
-                        <CheckboxOne :readonly="true" v-model="deleteClients" id="deleteClients" label=""
+                        <CheckboxOne :readonly="false" v-model="users.editClients" id="editClients" label="" class="ml-4" />
+                        <CheckboxOne :readonly="true" v-model="users.deleteClients" id="deleteClients" label=""
                             class="ml-4" />
 
                         <LabelFields label="Usuários" for-html="users"></LabelFields>
-                        <CheckboxOne :readonly="false" v-model="includeUsers" id="includeUsers" label="" class="ml-4" />
-                        <CheckboxOne :readonly="false" v-model="editUsers" id="editUsers" label="" class="ml-4" />
-                        <CheckboxOne :readonly="true" v-model="deleteUsers" id="deleteUsers" label="" class="ml-4" />
+                        <CheckboxOne :readonly="false" v-model="users.includeUsers" id="includeUsers" label="" class="ml-4" />
+                        <CheckboxOne :readonly="false" v-model="users.editUsers" id="editUsers" label="" class="ml-4" />
+                        <CheckboxOne :readonly="true" v-model="users.deleteUsers" id="deleteUsers" label="" class="ml-4" />
 
                         <LabelFields label="Licenças" for-html="licenses"></LabelFields>
-                        <CheckboxOne :readonly="false" v-model="includeLicenses" id="includeLicenses" label=""
+                        <CheckboxOne :readonly="false" v-model="users.includeLicenses" id="includeLicenses" label=""
                             class="ml-4" />
-                        <CheckboxOne :readonly="false" v-model="editLicenses" id="editLicenses" label="" class="ml-4" />
-                        <CheckboxOne :readonly="false" v-model="deleteLicenses" id="deleteLicenses" label=""
+                        <CheckboxOne :readonly="false" v-model="users.editLicenses" id="editLicenses" label="" class="ml-4" />
+                        <CheckboxOne :readonly="false" v-model="users.deleteLicenses" id="deleteLicenses" label=""
                             class="ml-4" />
 
                         <LabelFields label="Funcionalidades" for-html="functionalities"></LabelFields>
-                        <CheckboxOne :readonly="false" v-model="includeFunctionalities" id="includeFunctionalities"
+                        <CheckboxOne :readonly="false" v-model="users.includeFunctionalities" id="includeFunctionalities"
                             label="" class="ml-4" />
-                        <CheckboxOne :readonly="false" v-model="editFunctionalities" id="editFunctionalities" label=""
+                        <CheckboxOne :readonly="false" v-model="users.editFunctionalities" id="editFunctionalities" label=""
                             class="ml-4" />
-                        <CheckboxOne :readonly="false" v-model="deleteFunctionalities" id="deleteFunctionalities"
+                        <CheckboxOne :readonly="false" v-model="users.deleteFunctionalities" id="deleteFunctionalities"
                             label="" class="ml-4" />
 
                         <LabelFields label="Planos" for-html="plans"></LabelFields>
-                        <CheckboxOne :readonly="false" v-model="includePlans" id="includePlans" label="" class="ml-4" />
-                        <CheckboxOne :readonly="false" v-model="editPlans" id="editPlans" label="" class="ml-4" />
-                        <CheckboxOne :readonly="false" v-model="deletePlans" id="deletePlans" label="" class="ml-4" />
+                        <CheckboxOne :readonly="false" v-model="users.includePlans" id="includePlans" label="" class="ml-4" />
+                        <CheckboxOne :readonly="false" v-model="users.editPlans" id="editPlans" label="" class="ml-4" />
+                        <CheckboxOne :readonly="false" v-model="users.deletePlans" id="deletePlans" label="" class="ml-4" />
 
                         <LabelFields label="Logs" for-html="logs"></LabelFields>
-                        <CheckboxOne :readonly="false" v-model="includeLogs" id="includeLogs" label="" class="ml-4" />
-                        <CheckboxOne :readonly="false" v-model="editLogs" id="editLogs" label="" class="ml-4" />
-                        <CheckboxOne :readonly="true" v-model="deleteLogs" id="deleteLogs" label="" class="ml-4" />
+                        <CheckboxOne :readonly="false" v-model="users.includeLogs" id="includeLogs" label="" class="ml-4" />
+                        <CheckboxOne :readonly="false" v-model="users.editLogs" id="editLogs" label="" class="ml-4" />
+                        <CheckboxOne :readonly="true" v-model="users.deleteLogs" id="deleteLogs" label="" class="ml-4" />
                     </div>
 
                     <div class="p-6">
-                        <CheckboxOne :readonly="false" v-model="confidentialInformation" id="confidentialInformation"
+                        <CheckboxOne :readonly="false" v-model="users.confidentialInformation" id="confidentialInformation"
                             label="Informações Confidenciais" />
                     </div>
                 </DefaultCard>
