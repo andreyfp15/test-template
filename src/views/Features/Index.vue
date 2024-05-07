@@ -29,7 +29,7 @@ export default defineComponent({
   data() {
     const modalInfo: ModalInfo = reactive(ModalService.getFeatureModalInfo(''));
     return {
-      pageTitle: ref('Planos'),
+      pageTitle: ref('Funcionalidades'),
       features: [] as Feature[],
       loading: ref(true),
       
@@ -95,19 +95,25 @@ export default defineComponent({
       }
       if(modalType !== undefined)
         this.modalInfo = ModalService.getFeatureModalInfo(modalType);
-      else
-      {
-        this.deleteRow();
-        this.toDelete = 0;
-      }
       this.modalActive = !this.modalActive;
     },
-    closeModal() 
+    handleModalOk() 
     {
         if(this.modalInfo.title === 'Alerta')
         {
-          this.modalActive = !this.modalActive;
-          this.toggleModal('success');
+          if(this.toDelete !== 1)
+          {
+            this.modalActive = !this.modalActive;
+            this.deleteRow();
+            this.toDelete = 0;
+            this.toggleModal('success');
+          }
+          else //Simula erro de funcionalidade vinculada com plano ao excluir
+          {
+            this.toDelete = 0;
+            this.modalActive = !this.modalActive;
+            this.toggleModal('linkedPlanError');
+          }
         }
         else{
           this.toggleModal()
@@ -211,6 +217,6 @@ export default defineComponent({
     </div>
 
 
-    <ModalBase :message="modalInfo.message" :modal-active="modalActive" :title="modalInfo.title" :border-color="modalInfo.borderColor" :okTitle="modalInfo.okTitle" :noTitle="modalInfo.noTitle" :type="modalInfo.title" @ok-click="closeModal" @no-click="cancelDelete"/>
+    <ModalBase :message="modalInfo.message" :modal-active="modalActive" :title="modalInfo.title" :border-color="modalInfo.borderColor" :okTitle="modalInfo.okTitle" :noTitle="modalInfo.noTitle" :type="modalInfo.title" @ok-click="handleModalOk" @no-click="cancelDelete"/>
   </DefaultLayout>
 </template>

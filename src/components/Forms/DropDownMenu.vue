@@ -11,11 +11,6 @@ export default {
             type: Object as () => Option | undefined
         }
     },
-    data() {
-        return{
-            selectedOption: this.options[0].value
-        }
-    },
     methods:{
         updateValue(event?: any) {
             this.$emit("update:modelValue", event.target.value);

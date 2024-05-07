@@ -1,4 +1,4 @@
-import type { ModalInfo } from "@/models/ModalInfo"
+import type { ModalInfo } from '@/models/ModalInfo';
 export const ModalService = 
 {
     getFeatureModalInfo(modalType?: string) : ModalInfo
@@ -53,5 +53,33 @@ export const ModalService =
                 noTitle : undefined
               }
           }
+    },
+    getRegisterModalInfo(modalType?: string) : ModalInfo{
+        switch(modalType){
+            case 'success':
+                return{
+                    title: 'Sucesso!',
+                    message: 'Cadastro realizado com sucesso!',
+                    borderColor: '#34D399',
+                    okTitle: 'Ok',
+                    noTitle: undefined
+                };
+            case 'error':
+                return{
+                    title: 'Erro',
+                    message: 'É necessário que os campos estejam preenchidos!',
+                    borderColor: '#F87171',
+                    okTitle: 'Ok',
+                    noTitle: undefined
+                };
+            default:
+                return{
+                    title: '',
+                    message: '',
+                    borderColor: '#F87171',
+                    okTitle: 'Ok',
+                    noTitle: undefined
+                }
+        }
     }
 }
