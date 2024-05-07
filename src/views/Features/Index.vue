@@ -210,6 +210,6 @@ export default defineComponent({
     </div>
 
 
-    <ModalBase :message="modalInfo.message" :modal-active="modalActive" :title="modalInfo.title" :border-color="modalInfo.borderColor" :background-color="modalInfo.bgColor" :okTitle="modalInfo.okTitle" :noTitle="modalInfo.noTitle" :type="modalInfo.title" @ok-click="closeModal" @no-click="cancelDelete"/>
+    <ModalBase :message="modalInfo.message" :modal-active="modalActive" :title="modalInfo.title" :border-color="modalInfo.borderColor" :okTitle="modalInfo.okTitle" :noTitle="modalInfo.noTitle" :type="modalInfo.title" @ok-click="closeModal" @no-click="cancelDelete"/>
   </DefaultLayout>
 </template>
