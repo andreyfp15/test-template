@@ -9,6 +9,7 @@ export const ModalService =
                 title: 'Sucesso!',
                 message : 'Funcionalidade registrada com sucesso!',
                 borderColor : '#34D399',
+                bgColor: '#DDEFEB',
                 okTitle : 'Ok',
                 noTitle : undefined
                 };
@@ -17,6 +18,7 @@ export const ModalService =
                 title : 'Alerta',
                 message : 'Deseja apagar essa funcionalidade?',
                 borderColor : '#FFC800',
+                bgColor: '#EFEADD',
                 okTitle : 'Sim',
                 noTitle : 'Não',
             }
@@ -25,6 +27,7 @@ export const ModalService =
                 title : 'Erro',
                 message : 'É necessário desvincular essa funcionalidade de um plano antes de apagá-la!',
                 borderColor : '#F87171',
+                bgColor: '#EFDDDD',
                 okTitle : 'Ok',
                 noTitle : undefined,
             }
@@ -33,6 +36,7 @@ export const ModalService =
                 title : 'Erro',
                 message : 'É necessário desvincular essa funcionalidade de um plano antes de apagá-la!',
                 borderColor : '#F87171',
+                bgColor: '#EFDDDD',
                 okTitle : 'Ok',
                 noTitle : undefined,
             }  
@@ -41,6 +45,7 @@ export const ModalService =
                     title:'Sucesso!',
                     message : 'Funcionalidade registrada com sucesso!',
                     borderColor : '#34D399',
+                    bgColor: '#DDEFEB',
                     okTitle : 'Ok',
                     noTitle : undefined
                 }
@@ -49,6 +54,7 @@ export const ModalService =
                 title: '',
                 message : '',
                 borderColor : '#F87171',
+                bgColor: '#EFDDDD',
                 okTitle : '',
                 noTitle : undefined
               }

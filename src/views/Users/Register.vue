@@ -15,7 +15,7 @@ import CheckboxOne from '@/components/Forms/Checkboxes/CheckboxOne.vue'
 import LabelFields from '@/components/Forms/Labels/LabelFields.vue'
 import LabelInformation from '@/components/Forms/Labels/LabelInformation.vue'
 import InputForms from '@/components/Forms/InputFields/InputForms.vue'
-import ButtonApresentation from '@/components/Buttons/ButtonApresentation.vue'
+import ButtonApresentation from '@/components/Buttons/ButtonPresentation.vue'
 import ScreenForms from '@/layouts/ScreenForms.vue'
 import ModalBase from '@/components/Alerts/ModalBase.vue'
 
