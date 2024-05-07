@@ -12,6 +12,7 @@ import ButtonDefault from '@/components/Buttons/ButtonDefault.vue'
 
 import type { Users } from '@/models/Users'
 import { UserService } from '@/services/UsersService'
+import type { Option } from '@/models/Option'
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -42,10 +43,18 @@ export default defineComponent({
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
         id: { value: null, matchMode: FilterMatchMode.EQUALS },
         name: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-        date: { value: null, matchMode: FilterMatchMode.DATE_IS },
+        createdAt: { value: null, matchMode: FilterMatchMode.DATE_IS },
         status: { value: null, matchMode: FilterMatchMode.EQUALS }
       },
-      statusOptions: ['Ativo', 'Inativo']
+      statusOptions: [{
+        key: 1,
+        value: 'Ativo'
+      },
+      {
+        key: 2,
+        value: 'Inativo'
+      }
+      ] as Option[],
     }
   },
   mounted() {
@@ -68,7 +77,7 @@ export default defineComponent({
 
     getUsers(data: any) {
       return [...(data || [])].map((d) => {
-        d.date = new Date(d.date);
+        d.createdAt = new Date(d.createdAt);
 
         return d;
       });
@@ -114,7 +123,7 @@ export default defineComponent({
           :rowsPerPageOptions="[5, 10, 20, 50]"
           paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
           currentPageReportTemplate="{first} to {last} of {totalRecords}" :rows="10" filterDisplay="row"
-          :loading="loading" :globalFilterFields="['name', 'date', 'status']" editMode="row" dataKey="id"
+          :loading="loading" :globalFilterFields="['name', 'createdAt', 'status']" editMode="row" dataKey="id"
           :pt="{ table: { style: 'min-width: 50rem' } }">
           <template #empty> Nenhum usuário foi encontrado. </template>
           <template #loading> Carregando usuários... </template>
@@ -141,12 +150,12 @@ export default defineComponent({
             </template>
           </Column>
 
-          <Column field="date" header="Data de Criação" filterField="date" dataType="date" style="width: 15%">
+          <Column field="createdAt" header="Data de Criação" filterField="createdAt" dataType="date" style="width: 15%">
             <template #body="{ data }">
-              {{ GenericFunctions.formatDate(data.date) }}
+              {{ GenericFunctions.formatDate(data.createdAt) }}
             </template>
             <template #filter="{ filterModel, filterCallback }">
-              <Calendar v-model="filterModel.value" @input="filterCallback()" dateFormat="dd/mm/yy" 
+              <Calendar v-model="filterModel.value" dateFormat="dd/mm/yy" :manual-input="false" @date-select="filterCallback()"
                 placeholder="dd/mm/yyyy" mask="99/99/9999" inputClass="p-2"  />
             </template>
           </Column>
@@ -156,7 +165,7 @@ export default defineComponent({
               <Tag :value="data.status" :severity="getSeverity(data.status)" />
             </template>
             <template #filter="{ filterModel, filterCallback }">
-              <Dropdown v-model="filterModel.value" @change="filterCallback()" :options="statusOptions"
+              <Dropdown v-model="filterModel.value" @change="filterCallback()" :options="statusOptions.map(s => s.value)"
                 placeholder="Selecionar" class="p-column-filter" style="min-width: 10rem" :showClear="true">
                 <template #option="slotProps">
                   <Tag :value="slotProps.option" :severity="getSeverity(slotProps.option)" />

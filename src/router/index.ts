@@ -9,7 +9,8 @@ import Plans from '@/views/Plans/Index.vue'
 import Forms from '@/views/Forms/Index.vue'
 import Tables from '@/views/Tables/Index.vue'
 import PasswordReset from '@/views/PasswordReset/Index.vue'
-import Register from '@/views/Users/Register.vue'
+import UserRegister from '@/views/Users/UserRegister.vue'
+import PlanRegister from '@/views/Plans/PlanRegister.vue'
 
 const routes = [
   {
@@ -55,7 +56,7 @@ const routes = [
   {
     path: '/users/register/:id?',
     name: 'usersregister',
-    component: Register,
+    component: UserRegister,
     meta: {
       title: 'Cadastro de Usuários'
     },
@@ -72,6 +73,14 @@ const routes = [
     path: '/plans',
     name: 'plans',
     component: Plans,
+    meta: {
+      title: 'Planos'
+    },
+  },
+  {
+    path: '/plans/register/:id?',
+    name: 'plansregister',
+    component: PlanRegister,
     meta: {
       title: 'Planos'
     },

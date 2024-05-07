@@ -1,8 +1,8 @@
 export interface Users { 
     id: Number,
     name: string,
-    date: string, 
-    status: 'Ativo' | 'Inativo', 
+    createdAt: string, 
+    status: string,
     email: string,
     password: string,
 
